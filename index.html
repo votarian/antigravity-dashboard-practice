@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIM-OPS | 대표 & 부장 2인 초슬림 조직 경영/업무 통합 대시보드</title>
+
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Chart.js CDN for Visual Analytics -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- FontAwesome 6 Icons CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    body { font-family: 'Pretendard', sans-serif; }
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(51, 65, 85, 0.6);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #0f172a;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased min-h-screen selection:bg-blue-600 selection:text-white flex flex-col">
+
+  <!-- Top Fixed Header -->
+  <header class="bg-slate-900/90 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      
+      <!-- Brand & Status -->
+      <div class="flex items-center space-x-4">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 via-indigo-600 to-purple-600 flex items-center justify-center font-black text-white text-lg shadow-lg shadow-blue-500/20">
+          S
+        </div>
+        <div>
+          <div class="flex items-center space-x-2">
+            <h1 class="font-bold text-base text-white tracking-tight">SLIM-OPS 경영 & 업무 관제 대시보드</h1>
+            <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px] font-bold border border-emerald-500/30">● 2인 실시간 연동중</span>
+          </div>
+          <p class="text-[11px] text-slate-400">대표(External) ↔ 부장(Ops) 전용 소통 병목 0% 시스템</p>
+        </div>
+      </div>
+
+      <!-- User Role Switcher Tabs -->
+      <div class="flex items-center space-x-3">
+        <div class="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+          <button id="tab-ceo-btn" onclick="switchDashboardRole('ceo')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-crown text-amber-400"></i>
+            <span>대표님 관제 뷰</span>
+          </button>
+          <button id="tab-mgr-btn" onclick="switchDashboardRole('mgr')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-boxes-stacked text-blue-400"></i>
+            <span>부장님 운영 뷰</span>
+          </button>
+          <button id="tab-all-btn" onclick="switchDashboardRole('all')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5">
+            <i class="fa-solid fa-chart-line text-purple-400"></i>
+            <span>통합 경영 뷰</span>
+          </button>
+        </div>
+
+        <div class="hidden sm:flex text-right flex-col text-xs text-slate-400 border-l border-slate-800 pl-4 font-mono">
+          <span id="live-time" class="font-bold text-slate-200">14:20:00</span>
+          <span class="text-[10px] text-slate-500">월 고정비: ₩33,000</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Dashboard Grid Workspace -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6 flex-1 w-full">
+
+    <!-- 1. Executive Metric Highlights (Top Summary Bar) -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      
+      <!-- Metric 1: Monthly Profit & Deals -->
+      <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-2 shadow-md hover:border-slate-700 transition-all">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold">B2B 파이프라인 (Notion)</span>
+          <i class="fa-solid fa-handshake text-blue-400"></i>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <div class="text-2xl font-black text-white font-mono">14 <span class="text-xs font-normal text-slate-400">건</span></div>
+          <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">+₩1,480만</span>
+        </div>
+        <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+          <div class="bg-blue-500 h-full w-[80%]"></div>
+        </div>
+      </div>
+
+      <!-- Metric 2: Inventory Sync -->
+      <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-2 shadow-md hover:border-slate-700 transition-all">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold">실물 재고 수량 (스캔)</span>
+          <i class="fa-solid fa-box text-emerald-400"></i>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <div id="kpi-stock" class="text-2xl font-black text-emerald-400 font-mono">85 <span class="text-xs font-normal text-slate-400">개</span></div>
+          <span class="text-xs font-bold text-slate-400">안전기준 50개</span>
+        </div>
+        <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+          <div class="bg-emerald-500 h-full w-[85%]"></div>
+        </div>
+      </div>
+
+      <!-- Metric 3: Marketing Approval -->
+      <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-2 shadow-md hover:border-slate-700 transition-all">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold">피드백 대기 시안 (Canva)</span>
+          <i class="fa-solid fa-pen-nib text-amber-400"></i>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <div id="kpi-feedback" class="text-2xl font-black text-amber-400 font-mono">1 <span class="text-xs font-normal text-slate-400">건</span></div>
+          <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded">대표 승인대기</span>
+        </div>
+        <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+          <div class="bg-amber-400 h-full w-[60%]"></div>
+        </div>
+      </div>
+
+      <!-- Metric 4: Fixed Operating Cost -->
+      <div class="bg-slate-900/90 p-4 rounded-2xl border border-slate-800 space-y-2 shadow-md hover:border-slate-700 transition-all">
+        <div class="flex items-center justify-between text-xs text-slate-400">
+          <span class="font-semibold">월 고정 시스템 비용</span>
+          <i class="fa-solid fa-wallet text-purple-400"></i>
+        </div>
+        <div class="flex items-baseline justify-between">
+          <div class="text-2xl font-black text-purple-400 font-mono">₩33,000</div>
+          <span class="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded">예산 5만 충족</span>
+        </div>
+        <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+          <div class="bg-purple-500 h-full w-[66%]"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- 2. Main Workspace Layout Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+      <!-- Left Column (8 cols): Primary Operational Boards -->
+      <div class="lg:col-span-8 space-y-6">
+
+        <!-- Board 1: Representative's B2B Deals & Meeting Notes (Notion CRM) -->
+        <div id="sec-b2b" class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                <span>B2B 거래처 관제 DB (대표 작성 ↔ 부장 출고 즉시 참조)</span>
+              </h2>
+            </div>
+            <button onclick="openAddDealModal()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-xs font-bold transition-all flex items-center gap-1">
+              <i class="fa-solid fa-plus text-[10px]"></i>
+              <span>신규 미팅/거래처 등록</span>
+            </button>
+          </div>
+
+          <!-- B2B Deals Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead>
+                <tr class="bg-slate-950 text-slate-400 border-b border-slate-800">
+                  <th class="py-2.5 px-3">거래처명</th>
+                  <th class="py-2.5 px-3">미팅록 & 핵심 요청사항</th>
+                  <th class="py-2.5 px-3">진행 단계</th>
+                  <th class="py-2.5 px-3 text-right">예상 금액</th>
+                  <th class="py-2.5 px-3 text-center">액션</th>
+                </tr>
+              </thead>
+              <tbody id="b2b-table-body" class="divide-y divide-slate-800 text-slate-200">
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                  <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-building text-blue-400"></i>
+                    (주)부산항만물류
+                  </td>
+                  <td class="py-3 px-3 text-slate-300">
+                    "AI 컨테이너 관제 50대 도입 검토, 9/10 견적서 보완 요청"
+                  </td>
+                  <td class="py-3 px-3">
+                    <span class="px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 font-semibold text-[10px]">견적제안</span>
+                  </td>
+                  <td class="py-3 px-3 font-mono font-bold text-right text-emerald-400">₩25,000,000</td>
+                  <td class="py-3 px-3 text-center">
+                    <button onclick="alert('(주)부산항만물류 노션 미팅록으로 이동합니다.')" class="px-2 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded text-[10px]">미팅록 보기</button>
+                  </td>
+                </tr>
+
+                <tr class="hover:bg-slate-800/40 transition-colors">
+                  <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-ship text-emerald-400"></i>
+                    (주)동해해운
+                  </td>
+                  <td class="py-3 px-3 text-slate-300">
+                    <strong class="text-amber-400 font-bold">[특약사항]</strong> "당일 15시 전 발송 요청 (부장 출고완료)"
+                  </td>
+                  <td class="py-3 px-3">
+                    <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-semibold text-[10px]">계약완료</span>
+                  </td>
+                  <td class="py-3 px-3 font-mono font-bold text-right text-emerald-400">₩14,800,000</td>
+                  <td class="py-3 px-3 text-center">
+                    <button onclick="alert('부장님이 당일 14:30에 출고 처리를 완료했습니다.')" class="px-2 py-1 bg-emerald-600/20 text-emerald-400 border border-emerald-500/30 rounded text-[10px]">출고완료</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Board 2: Manager's Smart Inventory Scanner & Safety Stock Alerts -->
+        <div id="sec-inventory" class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-blue-400"></span>
+              <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                <span>실물 재고 스캔 관제 (부장 전용 스캐너 & Slack 알림 연동)</span>
+              </h2>
+            </div>
+            <span class="text-xs text-slate-400 font-mono">Boxhero / Sheets 연동</span>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Fast Stock Scanner Console -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+              <div class="flex items-center justify-between text-xs text-slate-300 font-bold">
+                <span>📱 스마트폰 바코드 스캔 콘솔</span>
+                <span class="text-emerald-400 text-[10px]">스캔 감지 대기중</span>
+              </div>
+
+              <div class="flex gap-2">
+                <input type="text" id="scanner-input" placeholder="바코드 스캔 (예: BOX-2026)" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white focus:outline-none focus:border-blue-500">
+                <button onclick="execScan(1)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg whitespace-nowrap">스캔 차감</button>
+              </div>
+
+              <div class="grid grid-cols-3 gap-2 pt-1">
+                <button onclick="execScan(1)" class="py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-lg">-1개 차감</button>
+                <button onclick="execScan(5)" class="py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-lg">-5개 차감</button>
+                <button onclick="execScan(10)" class="py-2 bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-bold rounded-lg">-10개 (안전재고 경고)</button>
+              </div>
+            </div>
+
+            <!-- Current Inventory Status Box -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+              <div class="flex justify-between items-center text-xs text-slate-300 font-bold">
+                <span>📦 품목: 박스 포장재 (대형)</span>
+                <span id="stock-badge" class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 text-[10px]">정상 수량</span>
+              </div>
+
+              <div class="flex items-baseline justify-between">
+                <span class="text-xs text-slate-400">현재 잔여 수량:</span>
+                <span id="current-stock-val" class="text-3xl font-black text-emerald-400 font-mono">85 개</span>
+              </div>
+
+              <div class="w-full bg-slate-800 rounded-full h-2 overflow-hidden">
+                <div id="stock-progress" class="bg-emerald-500 h-full w-[85%] transition-all duration-300"></div>
+              </div>
+
+              <div class="flex justify-between text-[11px] text-slate-400 pt-1">
+                <span>최소 안전재고: 50개</span>
+                <span id="slack-notif-text" class="text-slate-400">Slack 자동알림 대기</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Board 3: Marketing Content Kanban Board (Canva & Notion Integration) -->
+        <div id="sec-marketing" class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div class="flex items-center space-x-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+              <h2 class="text-sm font-bold text-white flex items-center gap-2">
+                <span>마케팅 콘텐츠 칸반보드 & Canva 피드백 승인함</span>
+              </h2>
+            </div>
+            <span class="text-xs text-purple-400 font-bold">버전 꼬임 0건</span>
+          </div>
+
+          <!-- 4 Kanban Columns Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            
+            <!-- Column 1: 기획중 -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex justify-between text-[11px] font-bold text-slate-400">
+                <span>1. 기획중</span>
+                <span>1</span>
+              </div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-xs space-y-1">
+                <div class="font-bold text-slate-200">하반기 B2B 리플렛</div>
+                <div class="text-[10px] text-slate-500">부장 작성 / 기획단계</div>
+              </div>
+            </div>
+
+            <!-- Column 2: 제작중 -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex justify-between text-[11px] font-bold text-blue-400">
+                <span>2. 제작중</span>
+                <span>1</span>
+              </div>
+              <div class="bg-slate-900 p-2.5 rounded-lg border border-slate-800 text-xs space-y-1">
+                <div class="font-bold text-slate-200">유튜브 숏츠 영상 v1</div>
+                <div class="text-[10px] text-blue-400">Canva 편집 진행중</div>
+              </div>
+            </div>
+
+            <!-- Column 3: 대표 피드백 -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex justify-between text-[11px] font-bold text-amber-400">
+                <span>3. 대표 피드백</span>
+                <span id="kanban-feedback-count">1</span>
+              </div>
+              
+              <div id="card-feedback" class="bg-amber-500/10 border border-amber-500/30 p-2.5 rounded-lg text-xs space-y-2">
+                <div class="font-bold text-white flex justify-between">
+                  <span>상세페이지 v2.3</span>
+                  <span class="text-[9px] px-1 bg-amber-400 text-slate-950 font-bold rounded">대기</span>
+                </div>
+                <div class="text-[10px] text-slate-300">🔗 canva.com/design/link</div>
+                <div class="flex gap-1 pt-1">
+                  <button onclick="approveCanva()" class="w-full py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded text-[10px] font-bold">✓ 승인</button>
+                  <button onclick="commentCanva()" class="w-full py-1 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded text-[10px]">💬 댓글</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Column 4: 발행 완료 -->
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex justify-between text-[11px] font-bold text-emerald-400">
+                <span>4. 발행 완료</span>
+                <span id="kanban-done-count">2</span>
+              </div>
+              <div id="kanban-done-box" class="space-y-1.5">
+                <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 text-[11px] text-slate-300">
+                  ✓ 카드뉴스 8월호 (발행)
+                </div>
+                <div class="bg-slate-900 p-2 rounded-lg border border-slate-800 text-[11px] text-slate-300">
+                  ✓ B2B 메일링 템플릿
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column (4 cols): Timeline Activity Log & Cost/CS Analytics -->
+      <div class="lg:col-span-4 space-y-6">
+
+        <!-- Widget 1: 2-Person Real-time Asynchronous Stream (Activity Log) -->
+        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-stream text-blue-400"></i>
+              <span>2인 실시간 업무 로그</span>
+            </h3>
+            <span class="text-[10px] text-slate-500">카톡 확인 대체</span>
+          </div>
+
+          <div id="dash-activity-log" class="space-y-2.5 text-xs font-mono max-h-72 overflow-y-auto custom-scrollbar">
+            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+              <div class="flex justify-between text-slate-300 font-bold">
+                <span>🟢 [부장] 스캔 차감</span>
+                <span class="text-[10px] text-slate-500">14:15</span>
+              </div>
+              <p class="text-[11px] text-slate-400">박스 포장재 1개 차감 완료 (잔여 85개)</p>
+            </div>
+
+            <div class="p-2.5 bg-slate-950 rounded-xl border border-slate-800 space-y-1">
+              <div class="flex justify-between text-slate-300 font-bold">
+                <span>🟢 [대표] B2B 파이프라인</span>
+                <span class="text-[10px] text-slate-500">13:40</span>
+              </div>
+              <p class="text-[11px] text-slate-400">(주)동해해운 특약사항 확인 및 출고 지시</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget 2: CS FAQ & ChannelTalk Quick Reply -->
+        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-comments text-purple-400"></i>
+              <span>채널톡 FAQ 빠른 응대</span>
+            </h3>
+            <span class="text-[10px] text-purple-400 font-bold">자산화 100%</span>
+          </div>
+
+          <div class="space-y-2 text-xs">
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
+              <div class="font-bold text-slate-200">Q. 당일 발송 마감 시간?</div>
+              <div class="text-[11px] text-slate-400">"오후 3시 결제건 당일 출고"</div>
+              <button onclick="copyReply('평일 오후 3시 이전 결제 완료 건은 당일 출고됩니다.')" class="w-full py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded text-[11px] font-bold transition-all">
+                답변 텍스트 복사하기
+              </button>
+            </div>
+
+            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1.5">
+              <div class="font-bold text-slate-200">Q. B2B 대량 구매 견적 문의</div>
+              <div class="text-[11px] text-slate-400">"대표 메일 전달시 1시간 내 전송"</div>
+              <button onclick="copyReply('사업자등록증을 대표 메일(support@slimops.ai)로 전달 주시면 1시간 내 발송됩니다.')" class="w-full py-1.5 bg-purple-600 hover:bg-purple-700 text-white rounded text-[11px] font-bold transition-all">
+                답변 텍스트 복사하기
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget 3: Tech Stack & Monthly Fixed Cost Breakdown Chart -->
+        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-xs font-bold text-white flex items-center gap-1.5">
+              <i class="fa-solid fa-calculator text-emerald-400"></i>
+              <span>월 고정비 (목표 5만 원 이하)</span>
+            </h3>
+            <span class="text-xs font-mono text-emerald-400 font-bold">월 33,000원</span>
+          </div>
+
+          <div class="space-y-2 text-xs text-slate-300">
+            <div class="flex justify-between items-center p-2 bg-slate-950 rounded-lg border border-slate-800">
+              <span class="flex items-center gap-1.5"><i class="fa-brands fa-google text-red-400"></i> Google Workspace</span>
+              <span class="font-mono font-bold text-white">₩18,000</span>
+            </div>
+            <div class="flex justify-between items-center p-2 bg-slate-950 rounded-lg border border-slate-800">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-cube text-slate-400"></i> Notion DB (Free)</span>
+              <span class="font-mono font-bold text-emerald-400">₩0</span>
+            </div>
+            <div class="flex justify-between items-center p-2 bg-slate-950 rounded-lg border border-slate-800">
+              <span class="flex items-center gap-1.5"><i class="fa-brands fa-slack text-purple-400"></i> Slack Bot (Free)</span>
+              <span class="font-mono font-bold text-emerald-400">₩0</span>
+            </div>
+            <div class="flex justify-between items-center p-2 bg-slate-950 rounded-lg border border-slate-800">
+              <span class="flex items-center gap-1.5"><i class="fa-solid fa-palette text-sky-400"></i> Canva Pro / Figma</span>
+              <span class="font-mono font-bold text-white">₩15,000</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 border-t border-slate-800 py-4 text-center text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
+      <span>SLIM-OPS 2-Person Slim Executive Dashboard System</span>
+      <span class="font-mono">Localhost Server: Active Port 8080</span>
+    </div>
+  </footer>
+
+  <!-- Add B2B Deal Modal -->
+  <div id="add-deal-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 max-w-md w-full text-slate-100 space-y-4 shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-sm text-white">💼 신규 B2B 미팅/거래처 등록</h3>
+        <button onclick="closeAddDealModal()" class="text-slate-400 hover:text-white">✕</button>
+      </div>
+
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">거래처명</label>
+          <input type="text" id="deal-company-input" placeholder="예: (주)신선식품 무역" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-lg text-white">
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">미팅록 & 주요 요청사항</label>
+          <textarea id="deal-note-input" rows="3" placeholder="미팅 내용 및 특약사항을 기재하세요." class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-lg text-white"></textarea>
+        </div>
+        <div>
+          <label class="block text-slate-300 font-bold mb-1">예상 거래 금액</label>
+          <input type="text" id="deal-price-input" placeholder="예: ₩10,000,000" class="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-lg text-white">
+        </div>
+      </div>
+
+      <div class="flex gap-2 pt-2">
+        <button onclick="saveB2BDeal()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs">등록하기</button>
+        <button onclick="closeAddDealModal()" class="w-full py-2.5 bg-slate-800 text-slate-300 font-bold rounded-lg text-xs">취소</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Interactive JavaScript Logic -->
+  <script>
+    let stockCount = 85;
+
+    // Clock
+    function updateClock() {
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0];
+      document.getElementById('live-time').textContent = timeStr;
+    }
+    setInterval(updateClock, 1000);
+
+    // Switch Dashboard Role View Filter
+    function switchDashboardRole(role) {
+      const secB2b = document.getElementById('sec-b2b');
+      const secInv = document.getElementById('sec-inventory');
+      const secMkt = document.getElementById('sec-marketing');
+      const btnCeo = document.getElementById('tab-ceo-btn');
+      const btnMgr = document.getElementById('tab-mgr-btn');
+      const btnAll = document.getElementById('tab-all-btn');
+
+      btnCeo.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5";
+      btnMgr.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5";
+      btnAll.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5";
+
+      if (role === 'ceo') {
+        btnCeo.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all flex items-center gap-1.5";
+        secB2b.style.display = 'block';
+        secMkt.style.display = 'block';
+        secInv.style.display = 'none';
+      } else if (role === 'mgr') {
+        btnMgr.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 transition-all flex items-center gap-1.5";
+        secInv.style.display = 'block';
+        secMkt.style.display = 'block';
+        secB2b.style.display = 'none';
+      } else {
+        btnAll.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30 transition-all flex items-center gap-1.5";
+        secB2b.style.display = 'block';
+        secInv.style.display = 'block';
+        secMkt.style.display = 'block';
+      }
+    }
+
+    // Inventory Scanner
+    function execScan(amt) {
+      stockCount -= amt;
+      if (stockCount < 0) stockCount = 0;
+
+      document.getElementById('current-stock-val').textContent = `${stockCount} 개`;
+      document.getElementById('kpi-stock').innerHTML = `${stockCount} <span class="text-xs font-normal text-slate-400">개</span>`;
+
+      const pct = Math.round((stockCount / 100) * 100);
+      document.getElementById('stock-progress').style.width = `${pct}%`;
+
+      addActivityLog(`🟢 [부장/재고] 바코드 스캔: 재고 ${amt}개 차감 (현재 수량: ${stockCount}개)`);
+
+      if (stockCount <= 50) {
+        document.getElementById('stock-badge').className = "px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 text-[10px] font-bold";
+        document.getElementById('stock-badge').textContent = "⚠️ 안전재고 미달!";
+        document.getElementById('slack-notif-text').innerHTML = `<span class="text-rose-400 font-bold animate-pulse">🚨 Slack #재고-알림 발송완료</span>`;
+
+        addActivityLog(`🚨 [Slack Bot] ⚠️ 안전재고(50개) 미달 경고 알림 전송 완료!`);
+        alert(`🚨 [Slack 알림 전송]\n안전재고(50개) 미달 감지! (현재 수량: ${stockCount}개)\nSlack #재고-알림 채널로 발주 요망 알림이 자동 전송되었습니다.`);
+      }
+    }
+
+    // Canva Approval
+    function approveCanva() {
+      document.getElementById('card-feedback').className = "bg-slate-900 border border-slate-800 p-2.5 rounded-lg text-xs space-y-1";
+      document.getElementById('card-feedback').innerHTML = `
+        <div class="font-bold text-emerald-400 flex justify-between">
+          <span>✓ 상세페이지 v2.3</span>
+          <span class="text-[9px] px-1 bg-emerald-500/20 text-emerald-300 font-bold rounded">승인완료</span>
+        </div>
+        <div class="text-[10px] text-slate-500">대표 승인 완료됨 (발행 대기)</div>
+      `;
+
+      document.getElementById('kpi-feedback').innerHTML = `0 <span class="text-xs font-normal text-slate-400">건</span>`;
+      document.getElementById('kanban-feedback-count').textContent = "0";
+
+      const doneBox = document.getElementById('kanban-done-box');
+      const item = document.createElement('div');
+      item.className = "bg-emerald-500/10 border border-emerald-500/30 p-2 rounded-lg text-[11px] text-emerald-300 font-bold";
+      item.textContent = "✓ 상세페이지 v2.3 (승인)";
+      doneBox.prepend(item);
+
+      document.getElementById('kanban-done-count').textContent = "3";
+
+      addActivityLog(`🟢 [대표/피드백] Canva 상세페이지 v2.3 최종 승인 처리`);
+      alert('Canva 시안 승인이 완료되어 노션 콘텐츠 칸반보드 [발행 완료] 컬럼으로 이동되었습니다.');
+    }
+
+    function commentCanva() {
+      const comment = prompt("부장님께 전달할 피드백 수정사항을 작성하세요:", "폰트 크기를 조금 더 키우고 헤드라인 강조 색상을 변경해 주세요.");
+      if (comment) {
+        addActivityLog(`💬 [대표/피드백] 시안 댓글 작성: "${comment}"`);
+        alert(`피드백 댓글이 부장님 슬랙/노션으로 전송되었습니다.`);
+      }
+    }
+
+    // B2B Modal
+    function openAddDealModal() {
+      document.getElementById('add-deal-modal').classList.remove('hidden');
+    }
+    function closeAddDealModal() {
+      document.getElementById('add-deal-modal').classList.add('hidden');
+    }
+
+    function saveB2BDeal() {
+      const comp = document.getElementById('deal-company-input').value;
+      const note = document.getElementById('deal-note-input').value;
+      const price = document.getElementById('deal-price-input').value || "₩0";
+
+      if (!comp) {
+        alert("거래처명을 입력해주세요.");
+        return;
+      }
+
+      const body = document.getElementById('b2b-table-body');
+      const tr = document.createElement('tr');
+      tr.className = "hover:bg-slate-800/40 transition-colors";
+      tr.innerHTML = `
+        <td class="py-3 px-3 font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-briefcase text-amber-400"></i>
+          ${comp}
+        </td>
+        <td class="py-3 px-3 text-slate-300">${note}</td>
+        <td class="py-3 px-3">
+          <span class="px-2 py-0.5 rounded bg-blue-500/20 text-blue-300 font-semibold text-[10px]">상담접수</span>
+        </td>
+        <td class="py-3 px-3 font-mono font-bold text-right text-emerald-400">${price}</td>
+        <td class="py-3 px-3 text-center">
+          <button class="px-2 py-1 bg-slate-800 text-slate-300 rounded text-[10px]">미팅록</button>
+        </td>
+      `;
+      body.prepend(tr);
+
+      addActivityLog(`🟢 [대표/B2B] 신규 거래처 [${comp}] 미팅록 등록 완료`);
+      closeAddDealModal();
+    }
+
+    function copyReply(text) {
+      navigator.clipboard.writeText(text);
+      alert(`[채널톡 답변 복사 완료]\n\n"${text}"`);
+    }
+
+    function addActivityLog(msg) {
+      const logContainer = document.getElementById('dash-activity-log');
+      const now = new Date();
+      const timeStr = now.toTimeString().split(' ')[0].substring(0, 5);
+
+      const div = document.createElement('div');
+      div.className = "p-2.5 bg-slate-950 rounded-xl border border-slate-800 space-y-1";
+      div.innerHTML = `
+        <div class="flex justify-between text-slate-300 font-bold">
+          <span>${msg.split(':')[0]}</span>
+          <span class="text-[10px] text-slate-500">${timeStr}</span>
+        </div>
+        <p class="text-[11px] text-slate-400">${msg.substring(msg.indexOf(':') + 1)}</p>
+      `;
+      logContainer.prepend(div);
+    }
+  </script>
+</body>
+</html>

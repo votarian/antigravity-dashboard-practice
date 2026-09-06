@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>B2B 세일즈 파이프라인 & 바이어 관리 대시보드</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen">
+
+  <!-- Top Navigation & Header -->
+  <header class="bg-slate-900 text-white sticky top-0 z-30 shadow-md">
+    <div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <!-- Brand & Title -->
+      <div class="flex items-center gap-3">
+        <div class="bg-blue-600 p-2 rounded-lg text-white">
+          <i class="fa-solid fa-ship text-xl"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-extrabold text-white tracking-tight">부산 B2B 수출입 세일즈 파이프라인</h1>
+            <span class="bg-blue-500/20 text-blue-300 border border-blue-400/30 text-xs px-2.5 py-0.5 rounded-full font-medium">글로벌 무역 실시간 모니터링</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">부산 지역 수출입 기업 전용 바이어 유입 & 리드 전환 관리 대시보드</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs & Actions -->
+      <div class="flex items-center gap-4">
+        <nav class="flex bg-slate-800 p-1 rounded-lg border border-slate-700 text-xs">
+          <a href="index.html" class="px-3.5 py-1.5 rounded-md text-slate-300 hover:text-white transition-colors">
+            <i class="fa-solid fa-chart-pie mr-1"></i> 전사 경영 KPI
+          </a>
+          <a href="b2b-pipeline.html" class="px-3.5 py-1.5 rounded-md bg-blue-600 text-white font-bold shadow-sm">
+            <i class="fa-solid fa-funnel-dollar mr-1"></i> B2B 세일즈 파이프라인
+          </a>
+          <a href="manufacturing-monitoring.html" class="px-3.5 py-1.5 rounded-md text-slate-300 hover:text-white transition-colors">
+            <i class="fa-solid fa-industry mr-1"></i> 제조 공정 모니터링
+          </a>
+        </nav>
+        <button onclick="window.location.reload()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs rounded-lg transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-arrows-rotate"></i> 새로고침
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Top KPI Cards (4열) -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+      
+      <!-- Card 1: 신규 리드 유입 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 uppercase">신규 바이어 리드 유입</span>
+          <span class="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+            <i class="fa-solid fa-users-viewfinder text-base"></i>
+          </span>
+        </div>
+        <div class="mt-3">
+          <div class="text-3xl font-black text-slate-900">1,200 <span class="text-sm font-normal text-slate-500">건</span></div>
+          <div class="mt-2 flex items-center text-xs font-semibold text-emerald-600">
+            <i class="fa-solid fa-arrow-trend-up mr-1"></i>
+            <span>전월 대비 +14.2% 증가</span>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-xs text-slate-500">
+          <span>평균 응답시간: 2.4시간</span>
+          <span class="text-blue-600 font-medium">목표 달성중</span>
+        </div>
+      </div>
+
+      <!-- Card 2: 미팅 진행 건수 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 uppercase">화상/현지 미팅 진행</span>
+          <span class="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+            <i class="fa-solid fa-comments-dollar text-base"></i>
+          </span>
+        </div>
+        <div class="mt-3">
+          <div class="text-3xl font-black text-slate-900">540 <span class="text-sm font-normal text-slate-500">건</span></div>
+          <div class="mt-2 flex items-center text-xs font-semibold text-indigo-600">
+            <i class="fa-solid fa-filter mr-1"></i>
+            <span>1단계 유입 대비 전환율 45.0%</span>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-xs text-slate-500">
+          <span>금주 예정 미팅: 38건</span>
+          <span class="text-indigo-600 font-medium">활발</span>
+        </div>
+      </div>
+
+      <!-- Card 3: 견적 제출 금액 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 uppercase">견적서(RFQ) 발송 금액</span>
+          <span class="w-9 h-9 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+            <i class="fa-solid fa-file-invoice-dollar text-base"></i>
+          </span>
+        </div>
+        <div class="mt-3">
+          <div class="text-3xl font-black text-slate-900">$1,480K <span class="text-sm font-normal text-slate-500">(약 19.5억)</span></div>
+          <div class="mt-2 flex items-center text-xs font-semibold text-amber-600">
+            <i class="fa-solid fa-file-signature mr-1"></i>
+            <span>210건 공식 견적서 발송 완료</span>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-xs text-slate-500">
+          <span>건당 평균: $7,047</span>
+          <span class="text-amber-600 font-medium">협상 진행중</span>
+        </div>
+      </div>
+
+      <!-- Card 4: 최종 수주 계약액 -->
+      <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-semibold text-slate-500 uppercase">최종 계약 체결 수주액</span>
+          <span class="w-9 h-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+            <i class="fa-solid fa-handshake-simple text-base"></i>
+          </span>
+        </div>
+        <div class="mt-3">
+          <div class="text-3xl font-black text-slate-900">$620K <span class="text-sm font-normal text-slate-500">(약 8.2억)</span></div>
+          <div class="mt-2 flex items-center text-xs font-semibold text-emerald-600">
+            <i class="fa-solid fa-circle-check mr-1"></i>
+            <span>최종 수주 전환율 7.0% (84건)</span>
+          </div>
+        </div>
+        <div class="mt-3 pt-3 border-t border-slate-100 flex justify-between text-xs text-slate-500">
+          <span>목표 $600K 초과 달성</span>
+          <span class="text-emerald-600 font-bold">성공</span>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Main Charts Section (2열 Layout) -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Left: 세일즈 전환 파이프라인 퍼널 (7열) -->
+      <div class="lg:col-span-7 bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+                <i class="fa-solid fa-filter text-blue-600"></i> 단계별 세일즈 리드 전환 퍼널 (Funnel)
+              </h2>
+              <p class="text-xs text-slate-500 mt-1">리드 유입부터 최종 수주 계약까지의 단계별 전환 건수 및 이탈율 분석</p>
+            </div>
+            <span class="text-xs bg-slate-100 text-slate-700 px-3 py-1 rounded-full font-medium">전체 리드: 1,200건</span>
+          </div>
+
+          <!-- Custom Visual Funnel Steps -->
+          <div class="space-y-4 my-6">
+            
+            <!-- Step 1: 유입 -->
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-blue-700 flex items-center gap-1.5">
+                  <span class="w-5 h-5 bg-blue-600 text-white rounded-full flex items-center justify-center text-[10px]">1</span>
+                  바이어 인콰이어리 유입 (Inquiry)
+                </span>
+                <span class="text-slate-700">1,200 건 (전환율 100%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-9 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-gradient-to-r from-blue-600 to-blue-500 h-full rounded-lg transition-all duration-500" style="width: 100%"></div>
+                <span class="absolute right-4 text-xs font-bold text-slate-700">100%</span>
+              </div>
+            </div>
+
+            <!-- Step 2: 미팅 -->
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-indigo-700 flex items-center gap-1.5">
+                  <span class="w-5 h-5 bg-indigo-600 text-white rounded-full flex items-center justify-center text-[10px]">2</span>
+                  화상 / 현지 세일즈 미팅 (Pitching)
+                </span>
+                <span class="text-slate-700">540 건 (이전단계 대비 45.0%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-9 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-gradient-to-r from-indigo-600 to-indigo-500 h-full rounded-lg transition-all duration-500" style="width: 45%"></div>
+                <span class="absolute left-[47%] text-xs font-bold text-slate-700">45.0%</span>
+              </div>
+            </div>
+
+            <!-- Step 3: 견적 -->
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-amber-700 flex items-center gap-1.5">
+                  <span class="w-5 h-5 bg-amber-600 text-white rounded-full flex items-center justify-center text-[10px]">3</span>
+                  공식 견적서(RFQ) 발송 (Proposal)
+                </span>
+                <span class="text-slate-700">210 건 (이전단계 대비 38.9%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-9 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-gradient-to-r from-amber-500 to-amber-400 h-full rounded-lg transition-all duration-500" style="width: 17.5%"></div>
+                <span class="absolute left-[19.5%] text-xs font-bold text-slate-700">17.5%</span>
+              </div>
+            </div>
+
+            <!-- Step 4: 계약 -->
+            <div>
+              <div class="flex justify-between text-xs font-semibold mb-1">
+                <span class="text-emerald-700 flex items-center gap-1.5">
+                  <span class="w-5 h-5 bg-emerald-600 text-white rounded-full flex items-center justify-center text-[10px]">4</span>
+                  최종 수주 계약 체결 (Closed Deal)
+                </span>
+                <span class="text-slate-700">84 건 (최종 전환율 7.0%)</span>
+              </div>
+              <div class="w-full bg-slate-100 h-9 rounded-lg overflow-hidden relative flex items-center">
+                <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 h-full rounded-lg transition-all duration-500" style="width: 7%"></div>
+                <span class="absolute left-[9%] text-xs font-bold text-emerald-700">7.0%</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="p-3 bg-blue-50/50 border border-blue-100 rounded-lg text-xs text-slate-600 flex items-center gap-2">
+          <i class="fa-solid fa-lightbulb text-amber-500 text-sm"></i>
+          <span><strong>인사이트:</strong> 2단계 미팅에서 3단계 견적 발송 시 이탈률(61.1%)이 가장 높습니다. 샘플 제공 프로세스 개선이 요구됩니다.</span>
+        </div>
+      </div>
+
+      <!-- Right: 권역별/국가별 수주 점유율 파이 차트 (5열) -->
+      <div class="lg:col-span-5 bg-white rounded-xl border border-slate-200 p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-earth-americas text-indigo-600"></i> 타겟 권역별 수주 점유율
+            </h2>
+            <span class="text-xs text-slate-500">2026 누적 수주액 기준</span>
+          </div>
+
+          <div class="relative w-full h-[260px] flex items-center justify-center my-2">
+            <canvas id="regionPieChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Major Region List Summary -->
+        <div class="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-slate-100 text-xs">
+          <div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>동남아 (베트남/인도네시아)</span>
+            <span class="font-bold text-slate-800">42.0%</span>
+          </div>
+          <div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>북미 (미국/캐나다)</span>
+            <span class="font-bold text-slate-800">31.0%</span>
+          </div>
+          <div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>유럽 (독일/영국)</span>
+            <span class="font-bold text-slate-800">18.0%</span>
+          </div>
+          <div class="flex items-center justify-between p-2 bg-slate-50 rounded-lg">
+            <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>중동 및 기타</span>
+            <span class="font-bold text-slate-800">9.0%</span>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Recent 7-Day Inquiries Timeline Table -->
+    <section class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-2">
+        <div>
+          <h2 class="text-lg font-bold text-slate-900 flex items-center gap-2">
+            <i class="fa-solid fa-clock-rotate-left text-blue-600"></i> 최근 7일간 신규 바이어 인콰이어리 타임라인
+          </h2>
+          <p class="text-xs text-slate-500 mt-0.5">부산 항만 & 해외 영업팀에 수신된 글로벌 실시간 바이어 접수 내역</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-slate-500">필터:</span>
+          <select class="text-xs border border-slate-300 rounded-lg px-2.5 py-1.5 bg-slate-50 text-slate-700">
+            <option>전체 국가 보기</option>
+            <option>동남아시아</option>
+            <option>북미</option>
+            <option>유럽</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-600 uppercase">
+            <tr>
+              <th class="py-3 px-4">접수 일시</th>
+              <th class="py-3 px-4">바이어 기업명 (국가)</th>
+              <th class="py-3 px-4">관심 품목 카테고리</th>
+              <th class="py-3 px-4">담당 영업자</th>
+              <th class="py-3 px-4">예상 계약 규모</th>
+              <th class="py-3 px-4 text-center">진행 상태</th>
+              <th class="py-3 px-4 text-right">액션</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 text-slate-700" id="inquiry-table-body">
+            <!-- Table Rows dynamically generated below -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-400 mt-12">
+    <p>© 2026 Busan B2B Sales Pipeline Dashboard. All rights reserved. | 재직자 실무 생성형 AI 과정 2일차 1교시 실습</p>
+  </footer>
+
+  <script>
+    // 타겟 권역별 수주 점유율 Pie Chart
+    const ctxRegion = document.getElementById('regionPieChart').getContext('2d');
+    const regionPieChart = new Chart(ctxRegion, {
+      type: 'doughnut',
+      data: {
+        labels: ['동남아 (베트남/인도네시아)', '북미 (미국/캐나다)', '유럽 (독일/영국)', '중동 및 기타'],
+        datasets: [{
+          data: [42, 31, 18, 9],
+          backgroundColor: [
+            '#3b82f6', // 동남아 Blue
+            '#6366f1', // 북미 Indigo
+            '#a855f7', // 유럽 Purple
+            '#f59e0b'  // 중동 Amber
+          ],
+          borderWidth: 3,
+          borderColor: '#ffffff'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return ` ${context.label}: ${context.raw}%`;
+              }
+            }
+          }
+        },
+        cutout: '60%'
+      }
+    });
+
+    // 타임라인 더미 데이터
+    const dummyInquiries = [
+      { date: '2026-09-06 09:30', company: 'Pacific Freight Lines', country: '🇺🇸 미국', product: '조선기자재 / 선박 밸브', manager: '김철수 팀장', value: '$120,000', status: '견적발송', statusBg: 'bg-amber-100 text-amber-800' },
+      { date: '2026-09-05 16:45', company: 'Saigon Port Logistics', country: '🇻🇳 베트남', product: '항만 크레인 부품', manager: '이영희 과장', value: '$85,000', status: '미팅예정', statusBg: 'bg-indigo-100 text-indigo-800' },
+      { date: '2026-09-05 11:15', company: 'Hanseatic Trade GmbH', country: '🇩🇪 독일', product: '해양 친환경 펌프 시스템', manager: '박민수 대리', value: '$250,000', status: '계약완료', statusBg: 'bg-emerald-100 text-emerald-800' },
+      { date: '2026-09-04 14:20', company: 'Jakarta Marine Corp', country: '🇮🇩 인도네시아', product: '선박 엔진 패킹', manager: '김철수 팀장', value: '$45,000', status: '신규접수', statusBg: 'bg-blue-100 text-blue-800' },
+      { date: '2026-09-03 10:05', company: 'Toronto Global Supply', country: '🇨🇦 캐나다', product: '해양 배관 밸브 팩', manager: '이영희 과장', value: '$95,000', status: '견적발송', statusBg: 'bg-amber-100 text-amber-800' },
+      { date: '2026-09-02 17:30', company: 'Dubai Trade Hub', country: '🇦🇪 UAE', product: '갑판 조명 디바이스', manager: '박민수 대리', value: '$60,000', status: '미팅예정', statusBg: 'bg-indigo-100 text-indigo-800' },
+      { date: '2026-09-01 13:50', company: 'Bangkok Industry Co.', country: '🇹🇭 태국', product: '유압 실린더 유닛', manager: '김철수 팀장', value: '$110,000', status: '계약완료', statusBg: 'bg-emerald-100 text-emerald-800' }
+    ];
+
+    function renderTable() {
+      const tbody = document.getElementById('inquiry-table-body');
+      tbody.innerHTML = '';
+
+      dummyInquiries.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        tr.innerHTML = `
+          <td class="py-3 px-4 text-xs font-mono text-slate-500">${item.date}</td>
+          <td class="py-3 px-4 font-medium text-slate-900">${item.company} <span class="text-xs text-slate-500 ml-1">${item.country}</span></td>
+          <td class="py-3 px-4 text-xs text-slate-600">${item.product}</td>
+          <td class="py-3 px-4 text-xs text-slate-700">${item.manager}</td>
+          <td class="py-3 px-4 text-xs font-bold text-slate-900">${item.value}</td>
+          <td class="py-3 px-4 text-center">
+            <span class="px-2.5 py-1 rounded-full text-xs font-bold ${item.statusBg}">${item.status}</span>
+          </td>
+          <td class="py-3 px-4 text-right">
+            <button class="text-xs text-blue-600 hover:text-blue-800 font-semibold">상세보기</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    renderTable();
+  </script>
+</body>
+</html>

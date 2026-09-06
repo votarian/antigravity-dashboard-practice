@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사출성형 제조 공정 실시간 모니터링 시스템</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Apache ECharts v5.4.3 CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+    body {
+      font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    .pulse-green {
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+      animation: pulseGreen 2s infinite;
+    }
+    @keyframes pulseGreen {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .pulse-amber {
+      box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+      animation: pulseAmber 2s infinite;
+    }
+    @keyframes pulseAmber {
+      0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 antialiased min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-30 shadow-lg">
+    <div class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-3.5 flex flex-col md:flex-row items-center justify-between gap-4">
+      
+      <!-- Brand & Status -->
+      <div class="flex items-center gap-3">
+        <div class="bg-emerald-600 p-2 rounded-lg text-white">
+          <i class="fa-solid fa-industry text-xl"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-xl font-extrabold text-white tracking-tight">사출성형 공장 실시간 공정 모니터링</h1>
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded-full font-semibold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-green"></span> SYSTEM NORMAL
+            </span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">부산 스마트 팩토리 제1공장 | 실시간 센서 연동 중</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs & Actions -->
+      <div class="flex items-center gap-4">
+        <nav class="flex bg-slate-800 p-1 rounded-lg border border-slate-700 text-xs">
+          <a href="index.html" class="px-3.5 py-1.5 rounded-md text-slate-300 hover:text-white transition-colors">
+            <i class="fa-solid fa-chart-pie mr-1"></i> 전사 경영 KPI
+          </a>
+          <a href="b2b-pipeline.html" class="px-3.5 py-1.5 rounded-md text-slate-300 hover:text-white transition-colors">
+            <i class="fa-solid fa-funnel-dollar mr-1"></i> B2B 세일즈
+          </a>
+          <a href="manufacturing-monitoring.html" class="px-3.5 py-1.5 rounded-md bg-emerald-600 text-white font-bold shadow-sm">
+            <i class="fa-solid fa-industry mr-1"></i> 제조 공정 모니터링
+          </a>
+        </nav>
+        <button onclick="window.location.reload()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs rounded-lg transition-colors flex items-center gap-1.5">
+          <i class="fa-solid fa-arrows-rotate"></i> 실시간 동기화
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+
+    <!-- Top: 1~4 라인 실시간 가동 현황 카드 -->
+    <section>
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-base font-bold text-slate-200 flex items-center gap-2">
+          <i class="fa-solid fa-microchip text-emerald-400"></i> 사출 성형 라인별 실시간 가동 상태 (1~4호기)
+        </h2>
+        <span class="text-xs text-slate-400">갱신 주기: 1초 | 총 가동 라인: 3/4</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        
+        <!-- Line 1 -->
+        <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-sm hover:border-emerald-500/50 transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-white">제 1 라인 (150톤 사출기)</span>
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-green"></span> 가동중
+            </span>
+          </div>
+          <div class="mt-3 text-xs text-slate-400">성형 품목: <span class="text-slate-200 font-medium">스마트폰 하우징</span></div>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center bg-slate-950 p-2.5 rounded-lg border border-slate-800/80">
+            <div>
+              <div class="text-[10px] text-slate-500">가동률</div>
+              <div class="text-sm font-black text-emerald-400">94.5%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">OEE</div>
+              <div class="text-sm font-black text-blue-400">88.0%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">불량률</div>
+              <div class="text-sm font-black text-slate-200">1.2%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Line 2 -->
+        <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-sm hover:border-emerald-500/50 transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-white">제 2 라인 (220톤 사출기)</span>
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-green"></span> 가동중
+            </span>
+          </div>
+          <div class="mt-3 text-xs text-slate-400">성형 품목: <span class="text-slate-200 font-medium">전장용 방수 커넥터</span></div>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center bg-slate-950 p-2.5 rounded-lg border border-slate-800/80">
+            <div>
+              <div class="text-[10px] text-slate-500">가동률</div>
+              <div class="text-sm font-black text-emerald-400">91.0%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">OEE</div>
+              <div class="text-sm font-black text-blue-400">85.0%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">불량률</div>
+              <div class="text-sm font-black text-slate-200">1.5%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Line 3 (점검중) -->
+        <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-sm hover:border-amber-500/50 transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-white">제 3 라인 (300톤 사출기)</span>
+            <span class="bg-amber-500/20 text-amber-400 border border-amber-500/30 text-xs px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-amber-400 pulse-amber"></span> 정기점검
+            </span>
+          </div>
+          <div class="mt-3 text-xs text-slate-400">성형 품목: <span class="text-amber-300 font-medium">금형 교체 및 노즐 청소</span></div>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center bg-slate-950 p-2.5 rounded-lg border border-slate-800/80">
+            <div>
+              <div class="text-[10px] text-slate-500">가동률</div>
+              <div class="text-sm font-black text-amber-400">0.0%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">OEE</div>
+              <div class="text-sm font-black text-slate-500">-</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">예상완료</div>
+              <div class="text-sm font-black text-amber-400">11:30</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Line 4 -->
+        <div class="bg-slate-900 rounded-xl border border-slate-800 p-5 shadow-sm hover:border-emerald-500/50 transition-colors">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold text-white">제 4 라인 (180톤 초정밀)</span>
+            <span class="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs px-2.5 py-0.5 rounded-full font-bold flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-emerald-400 pulse-green"></span> 가동중
+            </span>
+          </div>
+          <div class="mt-3 text-xs text-slate-400">성형 품목: <span class="text-slate-200 font-medium">가전 광학 렌즈 가이드</span></div>
+          <div class="mt-4 grid grid-cols-3 gap-2 text-center bg-slate-950 p-2.5 rounded-lg border border-slate-800/80">
+            <div>
+              <div class="text-[10px] text-slate-500">가동률</div>
+              <div class="text-sm font-black text-emerald-400">96.2%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">OEE</div>
+              <div class="text-sm font-black text-blue-400">92.0%</div>
+            </div>
+            <div>
+              <div class="text-[10px] text-slate-500">불량률</div>
+              <div class="text-sm font-black text-emerald-400">0.8%</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Middle: Apache ECharts Gauge Charts (2종) -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      
+      <!-- Gauge 1: 전사 평균 설비 종합 효율 (OEE) -->
+      <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-gauge-high text-emerald-400"></i> 전사 설비 종합 효율 (OEE Gauge)
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">시간가동률 × 성능가동률 × 양품률 종합 지표</p>
+          </div>
+          <span class="text-xs bg-slate-800 text-emerald-400 border border-slate-700 px-3 py-1 rounded-full font-bold">목표: 85.0% 이상</span>
+        </div>
+        <div class="relative w-full h-[320px]">
+          <div id="oeeGaugeChart" class="w-full h-full"></div>
+        </div>
+      </div>
+
+      <!-- Gauge 2: 실시간 공정 불량률 (Defect Rate) -->
+      <div class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-triangle-exclamation text-amber-400"></i> 실시간 공정 불량률 (Defect Rate Gauge)
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">임계 수치(2.0%) 초과 시 자동으로 품질 경보 팝업 트리거</p>
+          </div>
+          <span class="text-xs bg-slate-800 text-blue-400 border border-slate-700 px-3 py-1 rounded-full font-bold">허용 상한: 2.0% 이하</span>
+        </div>
+        <div class="relative w-full h-[320px]">
+          <div id="defectGaugeChart" class="w-full h-full"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Bottom: 생산 실적 및 파레토 결함 분석 차트 -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      
+      <!-- Left: 라인별 생산량 및 불량수량 비교 (7열) -->
+      <div class="lg:col-span-7 bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chart-column text-blue-400"></i> 라인별 목표 생산량 vs 불량 수량
+            </h3>
+            <p class="text-xs text-slate-400">금일 누적 생산 실적 (단위: 개)</p>
+          </div>
+          <span class="text-xs text-slate-400">총 양품 생산: 45,280 개</span>
+        </div>
+        <div class="relative w-full h-[340px]">
+          <div id="lineProductionChart" class="w-full h-full"></div>
+        </div>
+      </div>
+
+      <!-- Right: 사출 결함 유형별 파레토(Pareto) 분석 차트 (5열) -->
+      <div class="lg:col-span-5 bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-chart-line text-purple-400"></i> 품질 결함 원인 파레토 (Pareto 80:20)
+            </h3>
+            <p class="text-xs text-slate-400">막대: 결함 수량 | 꺾은선: 누적 비율 (%)</p>
+          </div>
+        </div>
+        <div class="relative w-full h-[340px]">
+          <div id="paretoChart" class="w-full h-full"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Real-time Equipment Alarm Log -->
+    <section class="bg-slate-900 rounded-xl border border-slate-800 p-6 shadow-sm">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <i class="fa-solid fa-bell text-amber-400"></i> 실시간 설비 경보 및 이벤트 타임라인 로그
+        </h3>
+        <span class="text-xs text-slate-400">최근 24시간 이벤트</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs text-slate-300">
+          <thead class="bg-slate-950 text-slate-400 uppercase font-semibold border-b border-slate-800">
+            <tr>
+              <th class="py-3 px-4">발생 시간</th>
+              <th class="py-3 px-4">발생 라인</th>
+              <th class="py-3 px-4">이벤트 유형</th>
+              <th class="py-3 px-4">상세 메세지</th>
+              <th class="py-3 px-4">담당 엔지니어</th>
+              <th class="py-3 px-4 text-center">조치 상태</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-800">
+            <tr class="hover:bg-slate-800/50">
+              <td class="py-3 px-4 font-mono text-slate-400">10:15:22</td>
+              <td class="py-3 px-4 font-bold text-amber-400">제 3 라인</td>
+              <td class="py-3 px-4">정기점검</td>
+              <td class="py-3 px-4">금형 30만 샷 달성 정기 점검 및 노즐 세척 작업 착수</td>
+              <td class="py-3 px-4">최동석 수석</td>
+              <td class="py-3 px-4 text-center"><span class="bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded font-bold">진행중</span></td>
+            </tr>
+            <tr class="hover:bg-slate-800/50">
+              <td class="py-3 px-4 font-mono text-slate-400">09:42:10</td>
+              <td class="py-3 px-4 font-bold text-emerald-400">제 1 라인</td>
+              <td class="py-3 px-4">온도 정상화</td>
+              <td class="py-3 px-4">사출 실린더 3구역 온도 정상 범위(230°C) 복귀 완료</td>
+              <td class="py-3 px-4">정호성 책임</td>
+              <td class="py-3 px-4 text-center"><span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">완료</span></td>
+            </tr>
+            <tr class="hover:bg-slate-800/50">
+              <td class="py-3 px-4 font-mono text-slate-400">08:30:05</td>
+              <td class="py-3 px-4 font-bold text-emerald-400">제 4 라인</td>
+              <td class="py-3 px-4">생산 가동</td>
+              <td class="py-3 px-4">초정밀 광학 렌즈 가이드 신규 배치(Batch #2026-09) 자동 가동</td>
+              <td class="py-3 px-4">이승우 선임</td>
+              <td class="py-3 px-4 text-center"><span class="bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold">정상</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-slate-900 border-t border-slate-800 py-6 text-center text-xs text-slate-500">
+    <p>© 2026 Smart Factory Injection Molding Monitoring. Powered by Apache ECharts. | 재직자 실무 생성형 AI 과정 2일차 1교시 실습</p>
+  </footer>
+
+  <!-- Apache ECharts Scripts -->
+  <script>
+    // 1. OEE Gauge Chart
+    const oeeChartDom = document.getElementById('oeeGaugeChart');
+    const oeeChart = echarts.init(oeeChartDom, 'dark');
+    const oeeOption = {
+      backgroundColor: 'transparent',
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 180,
+          endAngle: 0,
+          min: 0,
+          max: 100,
+          splitNumber: 5,
+          itemStyle: {
+            color: '#10b981',
+            shadowColor: 'rgba(16, 185, 129, 0.45)',
+            shadowBlur: 10,
+            shadowOffsetX: 2,
+            shadowOffsetY: 2
+          },
+          progress: {
+            show: true,
+            roundCap: true,
+            width: 18
+          },
+          pointer: {
+            icon: 'path://M2090.36,471.359pt...',
+            length: '75%',
+            width: 8,
+            offsetCenter: [0, '5%']
+          },
+          axisLine: {
+            roundCap: true,
+            lineStyle: {
+              width: 18,
+              color: [
+                [0.6, '#ef4444'],
+                [0.8, '#f59e0b'],
+                [1, '#10b981']
+              ]
+            }
+          },
+          axisTick: {
+            splitNumber: 2,
+            lineStyle: {
+              width: 2,
+              color: '#999'
+            }
+          },
+          splitLine: {
+            length: 12,
+            lineStyle: {
+              width: 3,
+              color: '#999'
+            }
+          },
+          axisLabel: {
+            distance: 20,
+            color: '#cbd5e1',
+            fontSize: 12
+          },
+          title: {
+            offsetCenter: [0, '-20%'],
+            fontSize: 14,
+            color: '#94a3b8'
+          },
+          detail: {
+            valueAnimation: true,
+            fontSize: 32,
+            fontWeight: 'bolder',
+            offsetCenter: [0, '35%'],
+            formatter: '{value}%',
+            color: '#10b981'
+          },
+          data: [
+            {
+              value: 87.5,
+              name: 'OEE 종합효율'
+            }
+          ]
+        }
+      ]
+    };
+    oeeChart.setOption(oeeOption);
+
+    // 2. Defect Rate Gauge Chart
+    const defectChartDom = document.getElementById('defectGaugeChart');
+    const defectChart = echarts.init(defectChartDom, 'dark');
+    const defectOption = {
+      backgroundColor: 'transparent',
+      series: [
+        {
+          type: 'gauge',
+          startAngle: 180,
+          endAngle: 0,
+          min: 0,
+          max: 5,
+          splitNumber: 5,
+          itemStyle: {
+            color: '#3b82f6'
+          },
+          progress: {
+            show: true,
+            roundCap: true,
+            width: 18
+          },
+          pointer: {
+            length: '75%',
+            width: 8,
+            offsetCenter: [0, '5%']
+          },
+          axisLine: {
+            roundCap: true,
+            lineStyle: {
+              width: 18,
+              color: [
+                [0.4, '#10b981'], // 0~2% 양호
+                [0.7, '#f59e0b'], // 2~3.5% 주의
+                [1, '#ef4444']    // 3.5~5% 위험
+              ]
+            }
+          },
+          axisLabel: {
+            distance: 20,
+            color: '#cbd5e1',
+            fontSize: 12,
+            formatter: '{value}%'
+          },
+          title: {
+            offsetCenter: [0, '-20%'],
+            fontSize: 14,
+            color: '#94a3b8'
+          },
+          detail: {
+            valueAnimation: true,
+            fontSize: 32,
+            fontWeight: 'bolder',
+            offsetCenter: [0, '35%'],
+            formatter: '{value}%',
+            color: '#3b82f6'
+          },
+          data: [
+            {
+              value: 1.15,
+              name: '공정 불량률'
+            }
+          ]
+        }
+      ]
+    };
+    defectChart.setOption(defectOption);
+
+    // 3. Line Production Chart (ECharts Bar)
+    const lineProdDom = document.getElementById('lineProductionChart');
+    const lineProdChart = echarts.init(lineProdDom, 'dark');
+    const lineProdOption = {
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'shadow' }
+      },
+      legend: {
+        data: ['양품 생산량 (개)', '불량 수량 (개)'],
+        textStyle: { color: '#cbd5e1' }
+      },
+      grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: ['1라인', '2라인', '3라인(점검)', '4라인'],
+          axisLine: { lineStyle: { color: '#475569' } }
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          name: '생산량 (개)',
+          axisLine: { lineStyle: { color: '#475569' } },
+          splitLine: { lineStyle: { color: '#334155' } }
+        }
+      ],
+      series: [
+        {
+          name: '양품 생산량 (개)',
+          type: 'bar',
+          emphasis: { focus: 'series' },
+          itemStyle: { color: '#3b82f6', borderRadius: [4, 4, 0, 0] },
+          data: [15400, 13800, 0, 16080]
+        },
+        {
+          name: '불량 수량 (개)',
+          type: 'bar',
+          emphasis: { focus: 'series' },
+          itemStyle: { color: '#ef4444', borderRadius: [4, 4, 0, 0] },
+          data: [186, 207, 0, 128]
+        }
+      ]
+    };
+    lineProdChart.setOption(lineProdOption);
+
+    // 4. Pareto Defect Chart
+    const paretoDom = document.getElementById('paretoChart');
+    const paretoChart = echarts.init(paretoDom, 'dark');
+    const paretoOption = {
+      backgroundColor: 'transparent',
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: { type: 'cross' }
+      },
+      grid: {
+        left: '3%',
+        right: '10%',
+        bottom: '3%',
+        containLabel: true
+      },
+      xAxis: [
+        {
+          type: 'category',
+          data: ['미성형', '플래시(지느러미)', '수축(Sink)', '변형', '치수불량'],
+          axisPointer: { type: 'shadow' },
+          axisLine: { lineStyle: { color: '#475569' } }
+        }
+      ],
+      yAxis: [
+        {
+          type: 'value',
+          name: '건수',
+          min: 0,
+          max: 300,
+          interval: 60,
+          splitLine: { lineStyle: { color: '#334155' } }
+        },
+        {
+          type: 'value',
+          name: '누적 비율 (%)',
+          min: 0,
+          max: 100,
+          interval: 20,
+          axisLabel: { formatter: '{value} %' },
+          splitLine: { show: false }
+        }
+      ],
+      series: [
+        {
+          name: '결함 건수',
+          type: 'bar',
+          itemStyle: { color: '#a855f7', borderRadius: [4, 4, 0, 0] },
+          data: [210, 150, 80, 50, 31]
+        },
+        {
+          name: '누적 비율',
+          type: 'line',
+          yAxisIndex: 1,
+          lineStyle: { width: 3, color: '#f59e0b' },
+          itemStyle: { color: '#f59e0b' },
+          data: [40.3, 69.1, 84.5, 94.1, 100.0]
+        }
+      ]
+    };
+    paretoChart.setOption(paretoOption);
+
+    // Window Resize Handler
+    window.addEventListener('resize', function() {
+      oeeChart.resize();
+      defectChart.resize();
+      lineProdChart.resize();
+      paretoChart.resize();
+    });
+  </script>
+</body>
+</html>

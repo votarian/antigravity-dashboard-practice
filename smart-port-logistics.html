@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스마트 AI 컨테이너 관제 솔루션 | PortSmart AI</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Web Font: Pretendard -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Pretendard', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-100 antialiased selection:bg-blue-500 selection:text-white">
+
+  <!-- 1. Header Section -->
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo -->
+      <a href="#" class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-blue-500/30">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+          </svg>
+        </div>
+        <span class="text-xl font-extrabold tracking-tight text-white">PortSmart <span class="text-blue-500">AI</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-slate-300">
+        <a href="#solution" class="hover:text-blue-400 transition-colors">솔루션 소개</a>
+        <a href="#features" class="hover:text-blue-400 transition-colors">핵심 기능</a>
+        <a href="#calculator" class="hover:text-blue-400 transition-colors">운임 절감 계산기</a>
+        <a href="#trust" class="hover:text-blue-400 transition-colors">고객 사례</a>
+        <a href="#lead-form" class="hover:text-blue-400 transition-colors">도입 문의</a>
+      </nav>
+
+      <!-- CTA Button -->
+      <div class="flex items-center space-x-4">
+        <a href="#lead-form" class="bg-blue-600 hover:bg-blue-500 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-lg shadow-blue-600/30 transition-all hover:scale-105">
+          무료 데모 신청
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Hero Section -->
+  <section id="solution" class="relative overflow-hidden pt-20 pb-28 lg:pt-32 lg:pb-36 bg-gradient-to-b from-slate-900 via-slate-900 to-slate-950 border-b border-slate-800">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/15 blur-[140px] rounded-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto space-y-6">
+        <span class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20 shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> 부산항 스마트 물류 관제 SaaS 1위
+        </span>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-tight">
+          항만 대기 시간 제로,<br>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-400 to-indigo-400">AI가 예측하는 가장 완벽한</span> 컨테이너 물류
+        </h1>
+        <p class="text-lg sm:text-xl text-slate-300 font-normal leading-relaxed">
+          실시간 위치 추적과 도착 시간(ETA) 99% 정확도로 물류비 20%를 절감하세요.
+        </p>
+
+        <!-- Dual Action Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+          <a href="#lead-form" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-base shadow-xl shadow-blue-600/30 transition-all hover:-translate-y-0.5 text-center">
+            14일 무료 체험
+          </a>
+          <button onclick="downloadBrochure()" class="w-full sm:w-auto px-8 py-4 rounded-xl border border-slate-700 hover:border-slate-500 bg-slate-800/50 text-slate-200 font-semibold text-base transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2">
+            <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+            소개서 다운로드
+          </button>
+        </div>
+      </div>
+
+      <!-- Dashboard Mockup Image Visual -->
+      <div class="mt-16 relative mx-auto max-w-5xl rounded-2xl border border-slate-800 bg-slate-900/80 shadow-2xl p-4 backdrop-blur">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-800 mb-4 px-2">
+          <div class="flex space-x-2">
+            <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+            <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+            <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+          </div>
+          <span class="text-xs text-slate-500 font-mono">PortSmart AI Dashboard v2.4</span>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/60">
+            <span class="text-xs text-slate-400 font-semibold">실시간 관제 중인 컨테이너</span>
+            <div class="text-3xl font-extrabold text-blue-400 mt-2">1,248 TEU</div>
+            <div class="text-xs text-emerald-400 mt-1 flex items-center gap-1">
+              <span>↑ 12% 증가</span> (전월 대비)
+            </div>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/60">
+            <span class="text-xs text-slate-400 font-semibold">부산신항 ETA 예측 정확도</span>
+            <div class="text-3xl font-extrabold text-cyan-400 mt-2">99.2%</div>
+            <div class="text-xs text-slate-400 mt-1">오차 범위 ±15분 이내</div>
+          </div>
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800/60">
+            <span class="text-xs text-slate-400 font-semibold">평균 항만 대기 절감 시간</span>
+            <div class="text-3xl font-extrabold text-indigo-400 mt-2">4.5 시간</div>
+            <div class="text-xs text-emerald-400 mt-1">체류 비용 평균 21% 절감</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Feature Grid (3 Columns) -->
+  <section id="features" class="py-24 bg-slate-950 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+        <h2 class="text-xs font-bold text-blue-500 uppercase tracking-widest">Core Capabilities</h2>
+        <p class="text-3xl sm:text-4xl font-extrabold text-white">물류 혁신을 이끄는 3가지 핵심 AI 엔진</p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Feature 1 -->
+        <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 hover:border-blue-500/50 transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 rounded-xl bg-blue-600/10 text-blue-400 flex items-center justify-center mb-6">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">실시간 AI 항로 예측</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            해상 기상 데이터와 글로벌 선박 AIS 위치 신호를 실시간 분석하여 최적 운항 항로와 신항 정박 ETA를 99% 정확도로 예측합니다.
+          </p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 hover:border-blue-500/50 transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 rounded-xl bg-cyan-600/10 text-cyan-400 flex items-center justify-center mb-6">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">컨테이너 온·습도 이상 감지</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            냉동 및 정밀 화물 컨테이너의 내부 온·습도와 진동 데이터를 24시간 실시간 모니터링하여 변동 즉시 긴급 알람을 전송합니다.
+          </p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="bg-slate-900 p-8 rounded-2xl border border-slate-800 hover:border-blue-500/50 transition-all hover:-translate-y-1">
+          <div class="w-14 h-14 rounded-xl bg-indigo-600/10 text-indigo-400 flex items-center justify-center mb-6">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">스마트 통관 서류 자동화</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            선적서류(B/L), 상업송장(CI), 포장명세서(PL)를 AI OCR로 즉시 해석하고 관세청 Uni-Pass 시스템과 자동 연동해 통관 시간을 절반으로 줄입니다.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Interactive Calculator Section (Section 2 Integration) -->
+  <section id="calculator" class="py-24 bg-slate-900 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-4xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl">
+        <div class="text-center space-y-3 mb-10">
+          <h2 class="text-xs font-bold text-blue-500 uppercase tracking-widest">Interactive Calculator</h2>
+          <p class="text-3xl font-extrabold text-white">우리 회사 예상 물류비 절감액 시뮬레이터</p>
+          <p class="text-slate-400 text-sm">월간 물류 운송 수량과 거리를 설정하고 예상 절감 비용을 확인하세요.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <!-- Range Controls -->
+          <div class="space-y-6">
+            <div>
+              <div class="flex justify-between text-sm font-semibold mb-2">
+                <span class="text-slate-300">월간 컨테이너 물동량 (TEU)</span>
+                <span id="teu-val" class="text-blue-400 font-bold">50 TEU</span>
+              </div>
+              <input type="range" id="teu-range" min="10" max="500" value="50" step="10" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500">
+            </div>
+
+            <div>
+              <div class="flex justify-between text-sm font-semibold mb-2">
+                <span class="text-slate-300">월 평균 운송 거리 (km)</span>
+                <span id="dist-val" class="text-blue-400 font-bold">300 km</span>
+              </div>
+              <input type="range" id="dist-range" min="50" max="2000" value="300" step="50" class="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500">
+            </div>
+          </div>
+
+          <!-- Output Box -->
+          <div class="bg-slate-900 border border-blue-500/30 rounded-2xl p-6 text-center space-y-4">
+            <span class="text-xs text-slate-400 font-semibold">PortSmart AI 도입 시 연간 예상 절감액</span>
+            <div id="savings-val" class="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              ₩ 36,000,000 원
+            </div>
+            <p class="text-xs text-slate-400">
+              * 기존 평균 항만 대기 체류료 및 연료비 대비 <strong class="text-emerald-400">20% 절감 기준</strong> 추정치
+            </p>
+            <a href="#lead-form" class="inline-block w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-sm transition-all shadow-md">
+              이 견적으로 데모 신청하기
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Trust & Social Proof Section -->
+  <section id="trust" class="py-20 bg-slate-950 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-slate-400 text-base font-medium mb-10">
+        국내 <span class="text-white font-bold underline decoration-blue-500 decoration-2">150+ 수출입 제조기업</span>이 PortSmart AI를 도입했습니다
+      </p>
+
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-6 opacity-75">
+        <div class="bg-slate-900/60 border border-slate-800 py-4 px-6 rounded-xl flex items-center justify-center font-bold text-slate-300">
+          🚢 부산물류인터내셔널
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 py-4 px-6 rounded-xl flex items-center justify-center font-bold text-slate-300">
+          ⚓ 동남권해운기획
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 py-4 px-6 rounded-xl flex items-center justify-center font-bold text-slate-300">
+          📦 녹산정밀글로벌
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 py-4 px-6 rounded-xl flex items-center justify-center font-bold text-slate-300">
+          🏭 한국스마트철강
+        </div>
+        <div class="bg-slate-900/60 border border-slate-800 py-4 px-6 rounded-xl flex items-center justify-center font-bold text-slate-300">
+          🌐 극동콜드체인
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Lead Generation Form Section -->
+  <section id="lead-form" class="py-24 bg-slate-900">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="max-w-2xl mx-auto bg-slate-950 border border-slate-800 rounded-3xl p-8 sm:p-12 shadow-2xl">
+        <div class="text-center space-y-3 mb-8">
+          <span class="text-xs font-bold text-blue-500 uppercase tracking-widest">Get Started</span>
+          <h2 class="text-3xl font-extrabold text-white">14일 무료 체험 & 도입 상담 신청</h2>
+          <p class="text-slate-400 text-sm">전문 컨설턴트가 24시간 이내에 맞춤형 도입 분석 보고서를 제공해 드립니다.</p>
+        </div>
+
+        <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">회사명 *</label>
+              <input type="text" id="company" required placeholder="(주)부산물류" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">담당자 성함 *</label>
+              <input type="text" id="name" required placeholder="홍길동 팀장" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">이메일 주소 *</label>
+              <input type="email" id="email" required placeholder="contact@company.com" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1.5">연락처 *</label>
+              <input type="tel" id="phone" required placeholder="010-1234-5678" class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-blue-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1.5">문의 및 요청 사항</label>
+            <textarea id="message" rows="3" placeholder="관심 기능 및 도입 원하시는 시기를 적어주세요." class="w-full px-4 py-3 bg-slate-900 border border-slate-800 rounded-xl text-slate-100 text-sm focus:outline-none focus:border-blue-500"></textarea>
+          </div>
+
+          <button type="submit" class="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl text-base shadow-lg shadow-blue-600/30 transition-all">
+            무료 데모 신청 완료하기
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Footer -->
+  <footer class="bg-slate-950 border-t border-slate-800 py-12 text-slate-400 text-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center space-x-3">
+          <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center text-white font-bold text-base">P</div>
+          <span class="text-lg font-bold text-white">PortSmart AI</span>
+        </div>
+        <div class="flex space-x-6 text-xs text-slate-400">
+          <a href="#" class="hover:text-white">이용약관</a>
+          <a href="#" class="hover:text-white">개인정보처리방침</a>
+          <a href="#" class="hover:text-white">보안정책</a>
+        </div>
+      </div>
+      <div class="border-t border-slate-900 pt-6 text-xs text-slate-500 leading-relaxed flex flex-col md:flex-row justify-between gap-2">
+        <p>(주)포트스마트에이아이 | 대표이사: 홍길동 | 사업자등록번호: 601-81-12345 | 주소: 부산광역시 중구 중앙대로 100 항만빌딩 8층</p>
+        <p>© 2026 PortSmart AI Inc. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Script for Interactive Calculator & Form Handling -->
+  <script>
+    const teuRange = document.getElementById('teu-range');
+    const distRange = document.getElementById('dist-range');
+    const teuVal = document.getElementById('teu-val');
+    const distVal = document.getElementById('dist-val');
+    const savingsVal = document.getElementById('savings-val');
+
+    function calculateSavings() {
+      const teu = parseInt(teuRange.value);
+      const dist = parseInt(distRange.value);
+      teuVal.textContent = `${teu} TEU`;
+      distVal.textContent = `${dist} km`;
+
+      // Estimated annual savings calculation
+      const baseSavings = teu * dist * 2400; 
+      savingsVal.textContent = `₩ ${baseSavings.toLocaleString()} 원`;
+    }
+
+    teuRange.addEventListener('input', calculateSavings);
+    distRange.addEventListener('input', calculateSavings);
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      const leadData = {
+        company: document.getElementById('company').value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        message: document.getElementById('message').value,
+        timestamp: new Date().toISOString()
+      };
+      
+      // Save to LocalStorage
+      const leads = JSON.parse(localStorage.getItem('port_leads') || '[]');
+      leads.push(leadData);
+      localStorage.setItem('port_leads', JSON.stringify(leads));
+
+      alert(`[데모 신청 완료]\n${leadData.name} 담당자님, 신청이 성공적으로 접수되었습니다.\n입력하신 ${leadData.email}(으)로 24시간 내 분석 보고서를 보내드립니다.`);
+      document.getElementById('contactForm').reset();
+    }
+
+    function downloadBrochure() {
+      alert("PortSmart AI 2026 서비스 브로슈어(PDF) 다운로드가 시작되었습니다.");
+    }
+  </script>
+</body>
+</html>

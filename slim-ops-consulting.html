@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SLIM-OPS AI | 2인 초슬림 조직 맞춤형 업무 자동화 & 관제 솔루션 (고객 테스트 데모)</title>
+
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              200: '#bae0fd',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a8a',
+            },
+            accent: {
+              50: '#f5f3ff',
+              100: '#ede9fe',
+              500: '#8b5cf6',
+              600: '#7c3aed',
+            }
+          },
+          boxShadow: {
+            'glow': '0 0 50px -12px rgba(59, 130, 246, 0.25)',
+            'card': '0 4px 20px -2px rgba(0, 0, 0, 0.05), 0 2px 6px -1px rgba(0, 0, 0, 0.02)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Pretendard', sans-serif; }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+    .gradient-border-card {
+      position: relative;
+      background: #ffffff;
+      border-radius: 1.25rem;
+    }
+    .gradient-border-card::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 1.3rem;
+      padding: 1px;
+      background: linear-gradient(135deg, #60a5fa 0%, #c084fc 50%, #818cf8 100%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-brand-500 selection:text-white">
+
+  <!-- Top Real Customer Test Mode Banner -->
+  <div class="bg-gradient-to-r from-brand-900 via-indigo-900 to-purple-900 text-white text-xs py-2.5 px-4 sticky top-0 z-50 shadow-md">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-2">
+        <span class="px-2 py-0.5 rounded bg-emerald-500 text-slate-950 font-bold text-[10px]">LIVE DEMO</span>
+        <span class="font-medium">고객 테스트 모드: 진단 신청 및 견적 계산기 100% 작동 중</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <button onclick="toggleAdminModal()" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded-md font-bold text-xs border border-white/20 transition-all flex items-center gap-1">
+          <span>📊 접수된 고객 DB 보기 (<span id="lead-count-badge">0</span>)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. Header Section -->
+  <header class="bg-white/90 backdrop-blur-md border-b border-slate-100 shadow-sm sticky top-9 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 via-indigo-600 to-purple-600 flex items-center justify-center shadow-md shadow-brand-500/20 text-white font-black text-xl">
+          S
+        </div>
+        <div class="flex flex-col">
+          <span class="font-bold text-xl tracking-tight text-slate-900 flex items-center gap-1.5">
+            SLIM-OPS <span class="text-xs px-2 py-0.5 rounded-full bg-brand-50 text-brand-600 font-semibold border border-brand-100">AI 2인 전용</span>
+          </span>
+          <span class="text-[11px] text-slate-400 font-medium">초슬림 조직 업무 자동화 관제</span>
+        </div>
+      </div>
+
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex items-center space-x-8 text-sm font-semibold text-slate-600">
+        <a href="#solution" class="hover:text-brand-600 transition-colors">솔루션 소개</a>
+        <a href="#demo-section" class="hover:text-brand-600 transition-colors">인터랙티브 관제</a>
+        <a href="#features" class="hover:text-brand-600 transition-colors">핵심 기능</a>
+        <a href="#calculator" class="hover:text-brand-600 transition-colors">맞춤 견적 계산</a>
+        <a href="#contact" class="hover:text-brand-600 transition-colors">무료 진단</a>
+      </nav>
+
+      <!-- CTA Button -->
+      <div class="flex items-center space-x-4">
+        <a href="#contact" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-700 hover:to-indigo-700 text-white text-sm font-bold shadow-md shadow-brand-500/25 transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+          <span>무료 맞춤 진단 신청</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Hero Section -->
+  <section class="relative pt-12 pb-20 overflow-hidden bg-gradient-to-b from-blue-50/60 via-indigo-50/30 to-slate-50">
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[350px] bg-gradient-to-tr from-blue-300/20 via-indigo-300/20 to-purple-300/20 blur-3xl rounded-full pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto space-y-6">
+        <!-- Top Pill Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 border border-slate-200 shadow-sm backdrop-blur-md">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-xs font-bold text-slate-700">대표 & 부장 2인 초슬림 조직 맞춤형</span>
+          <span class="text-slate-300">|</span>
+          <span class="text-xs font-semibold text-brand-600">월 예산 0원 ~ 4만 원대 최적화</span>
+        </div>
+
+        <!-- Main Headline -->
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-[1.15]">
+          "카톡으로 묻지 마세요"<br/>
+          <span class="bg-clip-text text-transparent bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600">AI & 비동기 관제로 완벽 통제</span>
+        </h1>
+
+        <!-- Sub Headline -->
+        <p class="text-lg sm:text-xl text-slate-600 leading-relaxed font-medium">
+          대표님은 <strong class="text-slate-900 font-bold">외부 미팅 & 영업</strong>에, 부장님은 <strong class="text-slate-900 font-bold">재고 & CS 운영</strong>에 집중!<br/>
+          실물 재고 차감 알림, 캔바 피드백 통합, B2B CRM으로 소통 병목을 100% 제거합니다.
+        </p>
+
+        <!-- Dual CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-2">
+          <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-gradient-to-r from-brand-600 via-indigo-600 to-purple-600 text-white font-bold text-base shadow-lg shadow-indigo-500/30 hover:shadow-xl hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
+            <span>14일 무료 맞춤 진단 신청</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+          </a>
+          <button onclick="openGuideModal()" class="w-full sm:w-auto px-8 py-4 rounded-2xl bg-white border border-slate-200 hover:border-slate-300 text-slate-700 font-bold text-base shadow-sm hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
+            <svg class="w-5 h-5 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3m0 003 3h10a3 3m0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span>2인 조직 가이드 미리보기</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Hero Interactive Dashboard Card Mockup (Inspired by Image 1 & 2) -->
+      <div id="demo-section" class="mt-12 max-w-5xl mx-auto">
+        <div class="gradient-border-card p-2 sm:p-4 shadow-glow">
+          <div class="bg-slate-900 rounded-xl overflow-hidden text-slate-100 shadow-2xl">
+            <!-- Window Header Bar -->
+            <div class="bg-slate-950 px-4 py-3 flex items-center justify-between border-b border-slate-800">
+              <div class="flex items-center space-x-2">
+                <div class="w-3 h-3 rounded-full bg-rose-500"></div>
+                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+                <span class="ml-2 text-xs font-mono text-slate-400">SLIM-OPS Live Interactive Prototype</span>
+              </div>
+              <div class="flex items-center space-x-3 text-xs text-slate-400">
+                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 font-medium">● 2인 클릭 테스트 가능</span>
+              </div>
+            </div>
+
+            <!-- Dashboard Content Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
+              <!-- Left Sidebar Interactive View Switcher -->
+              <div class="lg:col-span-3 bg-slate-900 p-4 border-r border-slate-800 space-y-4">
+                <div class="text-xs font-bold uppercase tracking-wider text-slate-400 px-2">역할별 뷰 전환 클릭</div>
+                
+                <button id="btn-view-ceo" onclick="switchView('ceo')" class="w-full text-left p-2.5 rounded-lg bg-slate-800 border border-brand-500 text-white flex items-center justify-between transition-all">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-7 h-7 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold text-xs">대</div>
+                    <div>
+                      <div class="text-xs font-bold text-white">대표님 View</div>
+                      <div class="text-[10px] text-slate-400">B2B CRM & 피드백 승인</div>
+                    </div>
+                  </div>
+                  <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+                </button>
+
+                <button id="btn-view-mgr" onclick="switchView('mgr')" class="w-full text-left p-2.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 flex items-center justify-between transition-all">
+                  <div class="flex items-center space-x-2.5">
+                    <div class="w-7 h-7 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center font-bold text-xs">부</div>
+                    <div>
+                      <div class="text-xs font-bold text-slate-200">부장님 View</div>
+                      <div class="text-[10px] text-slate-400">재고 스캔 & CS 응대</div>
+                    </div>
+                  </div>
+                  <span class="w-2 h-2 rounded-full bg-brand-400"></span>
+                </button>
+
+                <!-- Interactive Scan Simulator Button -->
+                <div class="pt-4 border-t border-slate-800 space-y-2">
+                  <div class="text-[11px] font-semibold text-slate-400 px-2">실시간 자동화 시뮬레이터</div>
+                  <button onclick="simulateScan()" class="w-full py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-lg text-xs font-bold shadow transition-all flex items-center justify-center gap-1.5">
+                    <span>📱 [부장] 재고 1개 차감 테스트</span>
+                  </button>
+                  <button onclick="simulateSlackAlert()" class="w-full py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-xs font-bold shadow transition-all flex items-center justify-center gap-1.5">
+                    <span>🚨 [Slack] 안전재고 알림 전송</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Main Dynamic Dashboard Area -->
+              <div class="lg:col-span-9 bg-slate-950 p-6 space-y-6">
+                <!-- Top Metric Strip -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[10px] font-semibold text-slate-400">실물 재고 수량</div>
+                    <div id="metric-stock" class="text-lg font-bold text-emerald-400 flex items-center justify-between mt-1">
+                      85개
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-normal">스캔 완료</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[10px] font-semibold text-slate-400">대표 피드백 소요</div>
+                    <div class="text-lg font-bold text-brand-400 flex items-center justify-between mt-1">
+                      12분
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-brand-500/20 text-brand-300 font-normal">-80% 감축</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[10px] font-semibold text-slate-400">B2B 진행 거래처</div>
+                    <div class="text-lg font-bold text-indigo-400 flex items-center justify-between mt-1">
+                      14건
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 font-normal">Notion DB</span>
+                    </div>
+                  </div>
+
+                  <div class="bg-slate-900 p-3 rounded-xl border border-slate-800">
+                    <div class="text-[10px] font-semibold text-slate-400">CS FAQ 처리율</div>
+                    <div class="text-lg font-bold text-purple-400 flex items-center justify-between mt-1">
+                      85%
+                      <span class="text-[10px] px-1.5 py-0.5 rounded bg-purple-500/20 text-purple-300 font-normal">채널톡</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Dynamic View Display Container -->
+                <div id="view-container-ceo" class="space-y-4">
+                  <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 class="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                      <span>👑 대표님 전용 뷰: B2B CRM 파이프라인 & Canva 피드백 승인함</span>
+                    </h3>
+                    <span class="text-[11px] text-slate-400">외근 중 스마트폰 확인 가능</span>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                      <div class="flex justify-between text-xs font-bold text-slate-200">
+                        <span>🏢 (주)한국물류 B2B 출고 건</span>
+                        <span class="text-emerald-400">계약완료</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400">미팅록: "당일 15시 전 발송 요청 건 (부장님 출고 확인 완료)"</p>
+                    </div>
+
+                    <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                      <div class="flex justify-between text-xs font-bold text-slate-200">
+                        <span>🎨 Canva 신제품 상세페이지 v2</span>
+                        <span class="text-amber-400">피드백 대기</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400">댓글: "카피 폰트 크기 변경 요청 → 부장 수정 진행중"</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div id="view-container-mgr" class="space-y-4 hidden">
+                  <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <h3 class="text-xs font-bold text-brand-400 flex items-center gap-1.5">
+                      <span>📦 부장님 전용 뷰: 재고 바코드 관제 & CS FAQ 응대</span>
+                    </h3>
+                    <span class="text-[11px] text-slate-400">실시간 수량 자동 차감 중</span>
+                  </div>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                      <div class="flex justify-between text-xs font-bold text-slate-200">
+                        <span>📦 포장용 B박스 (안전재고: 50개)</span>
+                        <span id="mgr-stock-status" class="text-emerald-400 font-bold">현재: 85개</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400">스마트폰 스캔으로 차감 시 Slack 알림 자동 연동</p>
+                    </div>
+
+                    <div class="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2">
+                      <div class="flex justify-between text-xs font-bold text-slate-200">
+                        <span>💬 채널톡 자주 묻는 질문 템플릿</span>
+                        <span class="text-purple-400">85% 자동처리</span>
+                      </div>
+                      <p class="text-[11px] text-slate-400">대표님 외근 시에도 사전등록 FAQ로 즉시 응대</p>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Simulation Live Notification Toast Area -->
+                <div id="sim-toast" class="hidden bg-slate-900 border border-brand-500/50 p-3 rounded-xl text-xs space-y-1 animate-bounce">
+                  <div id="sim-toast-title" class="font-bold text-brand-400"></div>
+                  <div id="sim-toast-msg" class="text-slate-300"></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. Dynamic Budget Calculator Section -->
+  <section id="calculator" class="py-16 bg-white border-y border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      <div class="text-center space-y-2">
+        <span class="text-xs font-bold text-brand-600 uppercase tracking-widest">Dynamic Price Configurator</span>
+        <h2 class="text-3xl font-black text-slate-900">2인 맞춤 테크스택 월 견적 실시간 시뮬레이션</h2>
+        <p class="text-xs text-slate-500">필요한 기능만 체크해 보세요. 5만 원 이하 예산을 완벽하게 보장합니다.</p>
+      </div>
+
+      <div class="bg-slate-50 p-6 sm:p-8 rounded-3xl border border-slate-200 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+        <!-- Left Checkbox Configurator -->
+        <div class="lg:col-span-7 space-y-4">
+          <label class="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-brand-300 transition-all">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk-gsuite" checked onchange="recalculateCost()" class="w-4 h-4 text-brand-600 rounded">
+              <div>
+                <div class="text-xs font-bold text-slate-800">Google Workspace Starter (@company.com)</div>
+                <div class="text-[11px] text-slate-500">공식 이메일, 공동 문서 공유 (2인 기준)</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-slate-700">+18,000원</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-brand-300 transition-all">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk-notion" checked disabled class="w-4 h-4 text-brand-600 rounded">
+              <div>
+                <div class="text-xs font-bold text-slate-800">Notion Free 워크스페이스</div>
+                <div class="text-[11px] text-slate-500">재고 DB, B2B CRM, 마케팅 보드 (게스트 초대)</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-emerald-600">0원 (무료)</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-brand-300 transition-all">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk-slack" checked disabled class="w-4 h-4 text-brand-600 rounded">
+              <div>
+                <div class="text-xs font-bold text-slate-800">Slack Free 워크스페이스</div>
+                <div class="text-[11px] text-slate-500">대표-부장 메신저 & 안전재고 자동 알림 연동</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-emerald-600">0원 (무료)</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-brand-300 transition-all">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk-canva" onchange="recalculateCost()" class="w-4 h-4 text-brand-600 rounded">
+              <div>
+                <div class="text-xs font-bold text-slate-800">Canva Pro / Figma 팀 요금제 (선택)</div>
+                <div class="text-[11px] text-slate-500">유료 템플릿 및 브랜드 키트 필요시</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-slate-700">+15,000원</span>
+          </label>
+
+          <label class="flex items-center justify-between p-3.5 bg-white rounded-xl border border-slate-200 cursor-pointer hover:border-brand-300 transition-all">
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="chk-channel" checked disabled class="w-4 h-4 text-brand-600 rounded">
+              <div>
+                <div class="text-xs font-bold text-slate-800">채널톡 Free 플랜</div>
+                <div class="text-[11px] text-slate-500">웹/스마트스토어 CS 통합 응대</div>
+              </div>
+            </div>
+            <span class="text-xs font-mono font-bold text-emerald-600">0원 (무료)</span>
+          </label>
+        </div>
+
+        <!-- Right Summary Card -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-brand-900 to-indigo-950 text-white p-6 rounded-2xl space-y-6 shadow-xl">
+          <div class="space-y-1">
+            <span class="text-[11px] font-bold text-brand-300">최종 추산 월 예산</span>
+            <div id="total-monthly-cost" class="text-3xl font-black text-white font-mono">월 18,000 원</div>
+            <p class="text-[11px] text-slate-300">목표 예산 5만 원 이하 기준 100% 충족!</p>
+          </div>
+
+          <div class="border-t border-white/10 pt-4 space-y-2 text-xs">
+            <div class="flex justify-between text-slate-300">
+              <span>연간 소통시간 절감:</span>
+              <span class="font-bold text-white">약 600 시간</span>
+            </div>
+            <div class="flex justify-between text-slate-300">
+              <span>구축 소요 기간:</span>
+              <span class="font-bold text-emerald-400">단 3주</span>
+            </div>
+          </div>
+
+          <a href="#contact" class="block text-center py-3 bg-gradient-to-r from-brand-500 to-indigo-600 hover:from-brand-600 hover:to-indigo-700 text-white font-bold rounded-xl text-xs shadow-lg transition-all">
+            이 조합으로 무료 진단 신청하기
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Feature Grid Section -->
+  <section id="features" class="py-20 bg-slate-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <h2 class="text-xs font-bold tracking-widest text-brand-600 uppercase">Core Optimization Features</h2>
+        <p class="text-3xl font-black text-slate-900 tracking-tight">
+          2인 조직 병목 해결을 위한 3대 맞춤 솔루션
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Card 1 -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-card space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-brand-50 text-brand-600 flex items-center justify-center font-bold text-xl">📦</div>
+          <h3 class="text-xl font-bold text-slate-900">① 재고 & 물류 스마트 관제</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">스마트폰 바코드 스캔으로 수량 자동 차감 및 Slack 안전재고 알림 발송</p>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-card space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold text-xl">🎨</div>
+          <h3 class="text-xl font-bold text-slate-900">② Canva/Figma 비동기 피드백</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">버전 꼬임 없이 위치별 댓글로 수정 요청 및 최종 디지털 포스트잇 승인</p>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="bg-white rounded-3xl p-6 border border-slate-200 shadow-card space-y-4">
+          <div class="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center font-bold text-xl">🏢</div>
+          <h3 class="text-xl font-bold text-slate-900">③ B2B CRM & CS 통합 응대</h3>
+          <p class="text-xs text-slate-600 leading-relaxed">대표님 미팅록 통합 노션 DB 저장 & 채널톡 FAQ 사전등록으로 응대시간 80% 감축</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Contact Lead Generation Form Section -->
+  <section id="contact" class="py-20 bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-950 text-white">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+      <div class="space-y-3">
+        <span class="px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold border border-brand-500/30">
+          실제 테스트 가능
+        </span>
+        <h2 class="text-3xl sm:text-4xl font-black tracking-tight text-white">
+          지금 바로 1:1 맞춤 진단을 신청해 보세요
+        </h2>
+        <p class="text-sm text-slate-300 max-w-xl mx-auto">
+          신청하신 정보는 즉시 로컬 고객 DB에 저장되며, 우측 상단 [접수된 고객 DB 보기] 버튼으로 실시간 확인할 수 있습니다.
+        </p>
+      </div>
+
+      <!-- Live Interactive Form -->
+      <form id="lead-form" onsubmit="handleLeadSubmit(event)" class="bg-white/10 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-white/10 space-y-4 max-w-md mx-auto text-left shadow-2xl">
+        <div>
+          <label class="block text-xs font-bold text-slate-200 mb-1">회사명 / 브랜드명</label>
+          <input type="text" id="lead-company" placeholder="예: (주)한국물류" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-200 mb-1">담당자 성함 및 직함</label>
+          <input type="text" id="lead-name" placeholder="예: 홍길동 대표 / 이부장" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-200 mb-1">연락처 (휴대폰 번호)</label>
+          <input type="tel" id="lead-phone" placeholder="010-0000-0000" required class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white text-sm focus:outline-none focus:border-brand-500">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-slate-200 mb-1">가장 해결하고 싶은 병목</label>
+          <select id="lead-bottleneck" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-slate-200 text-sm focus:outline-none focus:border-brand-500">
+            <option value="재고 데이터 불일치">수기 재고 확인 및 입출고 데이터 불일치</option>
+            <option value="디자인 피드백 혼선">디자인/영상 시안 버전 꼬임 및 카톡 수정요청</option>
+            <option value="B2B 정보 파편화">대표/부장 간 B2B 거래처 정보 파편화</option>
+            <option value="월 5만원 이하 전체 자동화">전체 업무 프로세스 월 5만원 이하 자동화 희망</option>
+          </select>
+        </div>
+
+        <button type="submit" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-500 to-indigo-600 hover:from-brand-600 hover:to-indigo-700 text-white font-bold text-base shadow-lg shadow-brand-500/30 transition-all">
+          무료 맞춤 진단서 신청하기 (테스트 실행)
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- 6. Footer -->
+  <footer class="bg-slate-950 text-slate-400 py-8 border-t border-slate-800 text-xs text-center">
+    <p>© 2026 SLIM-OPS AI. Localhost Customer Testing Demo Edition.</p>
+  </footer>
+
+  <!-- Admin Lead Viewer Modal -->
+  <div id="admin-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 max-w-2xl w-full text-slate-100 space-y-4 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="text-base font-bold text-white flex items-center gap-2">
+          <span>📊 접수된 고객 진단 DB (LocalStorage 저장소)</span>
+        </h3>
+        <button onclick="toggleAdminModal()" class="text-slate-400 hover:text-white font-bold text-lg">✕</button>
+      </div>
+
+      <div id="lead-list-container" class="space-y-3">
+        <!-- Leads will be rendered here dynamically -->
+      </div>
+
+      <div class="pt-2 flex justify-between">
+        <button onclick="clearLeads()" class="px-3 py-1.5 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-lg text-xs font-bold hover:bg-rose-500 hover:text-white transition-all">
+          DB 초기화
+        </button>
+        <button onclick="toggleAdminModal()" class="px-4 py-1.5 bg-slate-800 text-slate-300 rounded-lg text-xs font-bold hover:bg-slate-700">
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guide Preview Modal -->
+  <div id="guide-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center hidden p-4">
+    <div class="bg-white rounded-3xl p-6 max-w-lg w-full text-slate-800 space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+        <h3 class="font-bold text-slate-900">📄 2인 초슬림 조직 구축 가이드 미리보기</h3>
+        <button onclick="closeGuideModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
+      </div>
+      <div class="text-xs space-y-2 text-slate-600 leading-relaxed">
+        <p><strong>[가이드 목차 미리보기]</strong></p>
+        <p>1. 구글 계정 1개로 대표-부장 업무 분리하는 보안 세팅법</p>
+        <p>2. 바코드 앱과 구글 시트 0원으로 자동 연동하는 스마트 스크립트</p>
+        <p>3. 캔바 링크 클릭 한 번으로 대표님 승인 마크 남기는 표준 서식</p>
+      </div>
+      <button onclick="closeGuideModal()" class="w-full py-2.5 bg-brand-600 text-white font-bold text-xs rounded-xl">닫기</button>
+    </div>
+  </div>
+
+  <!-- JavaScript logic for customer testing interactive mode -->
+  <script>
+    // State management
+    let stockCount = 85;
+
+    function switchView(view) {
+      const ceoView = document.getElementById('view-container-ceo');
+      const mgrView = document.getElementById('view-container-mgr');
+      const btnCeo = document.getElementById('btn-view-ceo');
+      const btnMgr = document.getElementById('btn-view-mgr');
+
+      if (view === 'ceo') {
+        ceoView.classList.remove('hidden');
+        mgrView.classList.add('hidden');
+        btnCeo.className = "w-full text-left p-2.5 rounded-lg bg-slate-800 border border-brand-500 text-white flex items-center justify-between transition-all";
+        btnMgr.className = "w-full text-left p-2.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 flex items-center justify-between transition-all";
+      } else {
+        mgrView.classList.remove('hidden');
+        ceoView.classList.add('hidden');
+        btnMgr.className = "w-full text-left p-2.5 rounded-lg bg-slate-800 border border-brand-500 text-white flex items-center justify-between transition-all";
+        btnCeo.className = "w-full text-left p-2.5 rounded-lg bg-slate-950 hover:bg-slate-800 text-slate-300 border border-slate-800 flex items-center justify-between transition-all";
+      }
+    }
+
+    function simulateScan() {
+      if (stockCount > 0) {
+        stockCount--;
+        document.getElementById('metric-stock').innerHTML = `${stockCount}개 <span class="text-[10px] px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-normal">스캔 차감</span>`;
+        document.getElementById('mgr-stock-status').textContent = `현재: ${stockCount}개`;
+        showToast('📱 [부장님 스캔 완료]', `박스 포장재 재고 1개가 차감되었습니다. (잔여: ${stockCount}개)`);
+      }
+    }
+
+    function simulateSlackAlert() {
+      showToast('🚨 [Slack 자동 알림 발송]', `안전 재고 기준 미달! #재고-알림 채널로 발주 알림이 전송되었습니다.`);
+    }
+
+    function showToast(title, msg) {
+      const toast = document.getElementById('sim-toast');
+      document.getElementById('sim-toast-title').textContent = title;
+      document.getElementById('sim-toast-msg').textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 4000);
+    }
+
+    function recalculateCost() {
+      const gsuite = document.getElementById('chk-gsuite').checked ? 18000 : 0;
+      const canva = document.getElementById('chk-canva').checked ? 15000 : 0;
+      const total = gsuite + canva;
+      document.getElementById('total-monthly-cost').textContent = `월 ${total.toLocaleString()} 원`;
+    }
+
+    function handleLeadSubmit(e) {
+      e.preventDefault();
+      const company = document.getElementById('lead-company').value;
+      const name = document.getElementById('lead-name').value;
+      const phone = document.getElementById('lead-phone').value;
+      const bottleneck = document.getElementById('lead-bottleneck').value;
+
+      const lead = { company, name, phone, bottleneck, date: new Date().toLocaleString() };
+
+      const existingLeads = JSON.parse(localStorage.getItem('slim_ops_leads') || '[]');
+      existingLeads.unshift(lead);
+      localStorage.setItem('slim_ops_leads', JSON.stringify(existingLeads));
+
+      updateLeadBadge();
+      alert(`[진단 신청 완료]\n${company} ${name}님, 맞춤 진단서가 24시간 내 제출된 번호(${phone})로 전달됩니다.`);
+      document.getElementById('lead-form').reset();
+    }
+
+    function updateLeadBadge() {
+      const leads = JSON.parse(localStorage.getItem('slim_ops_leads') || '[]');
+      document.getElementById('lead-count-badge').textContent = leads.length;
+    }
+
+    function renderLeads() {
+      const leads = JSON.parse(localStorage.getItem('slim_ops_leads') || '[]');
+      const container = document.getElementById('lead-list-container');
+
+      if (leads.length === 0) {
+        container.innerHTML = `<div class="p-6 text-center text-xs text-slate-500">아직 접수된 고객 정보가 없습니다. 랜딩페이지 하단 폼에서 테스트로 입력해 보세요!</div>`;
+        return;
+      }
+
+      container.innerHTML = leads.map((item, idx) => `
+        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-xs space-y-1">
+          <div class="flex justify-between font-bold text-white">
+            <span>#${leads.length - idx} ${item.company} (${item.name})</span>
+            <span class="text-[10px] text-slate-400 font-mono">${item.date}</span>
+          </div>
+          <div class="text-slate-300">📞 연락처: ${item.phone}</div>
+          <div class="text-brand-400 font-semibold">🎯 병목 문제: ${item.bottleneck}</div>
+        </div>
+      `).join('');
+    }
+
+    function toggleAdminModal() {
+      const modal = document.getElementById('admin-modal');
+      modal.classList.toggle('hidden');
+      renderLeads();
+    }
+
+    function clearLeads() {
+      if (confirm('접수된 고객 DB를 초기화하시겠습니까?')) {
+        localStorage.removeItem('slim_ops_leads');
+        updateLeadBadge();
+        renderLeads();
+      }
+    }
+
+    function openGuideModal() {
+      document.getElementById('guide-modal').classList.remove('hidden');
+    }
+
+    function closeGuideModal() {
+      document.getElementById('guide-modal').classList.add('hidden');
+    }
+
+    // Initialize
+    updateLeadBadge();
+  </script>
+</body>
+</html>

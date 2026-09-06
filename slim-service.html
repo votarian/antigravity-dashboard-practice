@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2인 초슬림 조직 전용 통합 업무 관제 서비스 (SLIM-OPS Service)</title>
+  
+  <!-- Pretendard Font -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: 'Pretendard', sans-serif; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen selection:bg-blue-500 selection:text-white">
+
+  <!-- App Sticky Top Navigation -->
+  <header class="bg-slate-900 border-b border-slate-800 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- App Title -->
+      <div class="flex items-center space-x-3">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center font-bold text-white text-sm">
+          S
+        </div>
+        <div>
+          <h1 class="font-bold text-sm text-white flex items-center gap-2">
+            SLIM-OPS 내부 업무 관제 시스템
+            <span class="text-[10px] px-2 py-0.5 rounded bg-blue-500/20 text-blue-400 font-mono">v1.0 Service</span>
+          </h1>
+          <p class="text-[10px] text-slate-400">대표님 & 부장님 2인 전용 실시간 비동기 작업대</p>
+        </div>
+      </div>
+
+      <!-- Mode Switcher (대표 vs 부장) -->
+      <div class="flex items-center space-x-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <button id="mode-ceo-btn" onclick="switchUserMode('ceo')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all flex items-center gap-1.5">
+          <span>👑 대표님 모드 (External)</span>
+        </button>
+        <button id="mode-mgr-btn" onclick="switchUserMode('mgr')" class="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5">
+          <span>📦 부장님 모드 (Internal/Ops)</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+
+    <!-- Status Overview Cards -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-1">
+        <span class="text-[11px] text-slate-400 font-semibold">실물 포장재 재고</span>
+        <div class="flex items-baseline justify-between">
+          <span id="stock-val" class="text-2xl font-black text-emerald-400 font-mono">85 개</span>
+          <span class="text-[10px] text-slate-500">안전기준: 50개</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-1">
+        <span class="text-[11px] text-slate-400 font-semibold">승인 대기 시안</span>
+        <div class="flex items-baseline justify-between">
+          <span id="feedback-val" class="text-2xl font-black text-amber-400 font-mono">1 건</span>
+          <span class="text-[10px] text-slate-500">Canva 링크</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-1">
+        <span class="text-[11px] text-slate-400 font-semibold">B2B 진행 거래처</span>
+        <div class="flex items-baseline justify-between">
+          <span class="text-2xl font-black text-blue-400 font-mono">14 건</span>
+          <span class="text-[10px] text-slate-500">Notion CRM</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 p-4 rounded-2xl border border-slate-800 space-y-1">
+        <span class="text-[11px] text-slate-400 font-semibold">CS FAQ 응대율</span>
+        <div class="flex items-baseline justify-between">
+          <span class="text-2xl font-black text-purple-400 font-mono">85 %</span>
+          <span class="text-[10px] text-slate-500">채널톡 자동화</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- CEO Workspace View -->
+    <section id="view-ceo" class="space-y-6">
+      <div class="bg-amber-500/10 border border-amber-500/20 p-3 rounded-xl text-xs text-amber-300 flex items-center justify-between">
+        <span class="font-bold">👑 대표님 전용 워크스페이스: B2B CRM 미팅록 확인 & 시안 최종 승인</span>
+        <span class="text-[10px] text-slate-400">외부 미팅 중 휴대폰으로 승인 가능</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- B2B Deals Board -->
+        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <span>💼 B2B 거래처 파이프라인 (Notion DB 연동)</span>
+            </h3>
+            <button onclick="addB2BDeal()" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg">+ 신규 미팅 등록</button>
+          </div>
+
+          <div id="b2b-list" class="space-y-3">
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div>
+                <div class="text-xs font-bold text-white">(주)부산항만물류</div>
+                <div class="text-[11px] text-slate-400">미팅록: "컨테이너 관제 50대 도입 검토, 9월 10일 견적서 발송"</div>
+              </div>
+              <span class="px-2 py-1 bg-amber-500/20 text-amber-300 text-[10px] font-bold rounded">견적제안</span>
+            </div>
+
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div>
+                <div class="text-xs font-bold text-white">(주)동해해운</div>
+                <div class="text-[11px] text-slate-400">미팅록: "특약사항: 당일 15시 전 발송 요청건 (부장님 출고 완료)"</div>
+              </div>
+              <span class="px-2 py-1 bg-emerald-500/20 text-emerald-400 text-[10px] font-bold rounded">계약완료</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Canva Feedback & Approval Board -->
+        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <span>🎨 마케팅 시안 승인함 (Canva / Figma)</span>
+            </h3>
+            <span class="text-xs text-amber-400 font-bold">카톡 수정요청 금지 0건</span>
+          </div>
+
+          <div id="feedback-list" class="space-y-3">
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-3">
+              <div class="flex justify-between items-center text-xs">
+                <span class="font-bold text-white">[상세페이지 v2.3 시안]</span>
+                <span class="text-[10px] text-slate-400">부장 작성 10분 전</span>
+              </div>
+              <p class="text-xs text-slate-300 bg-slate-900 p-2.5 rounded-lg border border-slate-800">
+                🔗 <a href="#" class="text-blue-400 underline">canva.com/design/sample-link</a><br/>
+                댓글: "헤드라인 문구 수정건 검토 부탁드립니다."
+              </p>
+              <div class="flex gap-2">
+                <button onclick="approveDesign(this)" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-bold">
+                  ✓ 승인 완료 (Notion 자동반영)
+                </button>
+                <button onclick="rejectDesign(this)" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-bold">
+                  💬 댓글 수정요청
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Manager Workspace View -->
+    <section id="view-mgr" class="space-y-6 hidden">
+      <div class="bg-blue-500/10 border border-blue-500/20 p-3 rounded-xl text-xs text-blue-300 flex items-center justify-between">
+        <span class="font-bold">📦 부장님 전용 워크스페이스: 스마트 재고 스캔 & CS 응대 템플릿</span>
+        <span class="text-[10px] text-slate-400">바코드 스캔 시 Slack 자동 공유</span>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Stock Scanner & Barcode Tool -->
+        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <span>📱 실물 재고 스마트폰 스캔 입력기</span>
+            </h3>
+            <span class="text-xs text-emerald-400 font-bold">오차 0%</span>
+          </div>
+
+          <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 space-y-4">
+            <div class="space-y-2">
+              <label class="text-xs font-bold text-slate-300">스마트폰 QR/바코드 스캔 또는 빠른 차감</label>
+              <div class="flex gap-2">
+                <input type="text" id="barcode-input" placeholder="바코드 스캔 번호 (예: BOX-2026-09)" class="w-full px-3 py-2 bg-slate-900 border border-slate-700 rounded-lg text-xs text-white">
+                <button onclick="scanStock(1)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-lg whitespace-nowrap">스캔 차감</button>
+              </div>
+            </div>
+
+            <div class="pt-2 flex justify-between gap-2">
+              <button onclick="scanStock(1)" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-lg">-1개 차감</button>
+              <button onclick="scanStock(5)" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold rounded-lg">-5개 차감</button>
+              <button onclick="scanStock(10)" class="w-full py-2 bg-rose-600/80 hover:bg-rose-600 text-white text-xs font-bold rounded-lg">-10개 (안전재고 테스트)</button>
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-950 rounded-xl border border-slate-800 text-xs space-y-1">
+            <span class="text-slate-400 font-bold">Slack #재고-알림 자동연동 상태:</span>
+            <div id="slack-status" class="text-emerald-400 font-mono text-[11px]">● 정상 작동 중 (안전재고 미달 시 대표/부장 슬랙 메시지 자동발송)</div>
+          </div>
+        </div>
+
+        <!-- CS FAQ Quick Reply Tool -->
+        <div class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="font-bold text-sm text-white flex items-center gap-2">
+              <span>💬 CS 자주 묻는 질문(FAQ) 원클릭 답변</span>
+            </h3>
+            <span class="text-xs text-purple-400 font-bold">응대시간 -80%</span>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex justify-between items-center text-xs font-bold text-white">
+                <span>Q. 당일 발송 마감 시간이 언제인가요?</span>
+                <button onclick="copyFaq('평일 오후 3시 이전 결제 완료 건은 당일 출고됩니다.')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-[10px]">답변 복사</button>
+              </div>
+              <p class="text-[11px] text-slate-400">A. 평일 오후 3시 이전 결제 완료 건은 당일 출고됩니다.</p>
+            </div>
+
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-2">
+              <div class="flex justify-between items-center text-xs font-bold text-white">
+                <span>Q. B2B 대량 구매 견적서 발급 방법</span>
+                <button onclick="copyFaq('사업자등록증 복사본을 대표 메일(support@slimops.ai)로 전달주시면 1시간 내 전송됩니다.')" class="px-2.5 py-1 bg-purple-600 hover:bg-purple-700 text-white rounded text-[10px]">답변 복사</button>
+              </div>
+              <p class="text-[11px] text-slate-400">A. 사업자등록증 복사본을 대표 메일로 전달주시면 1시간 내 전송됩니다.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Asynchronous Activity Stream -->
+    <section class="bg-slate-900 rounded-2xl p-5 border border-slate-800 space-y-4">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-bold text-sm text-white flex items-center gap-2">
+          <span>🔔 2인 비동기 통합 타임라인 (Slack & Notion 자동 수집 로그)</span>
+        </h3>
+        <span class="text-xs text-slate-400">서로 묻지 않고 타임라인으로 확인</span>
+      </div>
+
+      <div id="activity-log" class="space-y-2 font-mono text-xs">
+        <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 flex justify-between text-slate-300">
+          <span>🟢 [부장/재고] 포장재 박스 1개 출고 스캔 완료</span>
+          <span class="text-[10px] text-slate-500">14:10</span>
+        </div>
+        <div class="p-2.5 bg-slate-950 rounded-lg border border-slate-800 flex justify-between text-slate-300">
+          <span>🟢 [대표/B2B] (주)동해해운 특약사항 확인 완료</span>
+          <span class="text-[10px] text-slate-500">13:50</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    let stock = 85;
+
+    function switchUserMode(mode) {
+      const ceoView = document.getElementById('view-ceo');
+      const mgrView = document.getElementById('view-mgr');
+      const ceoBtn = document.getElementById('mode-ceo-btn');
+      const mgrBtn = document.getElementById('mode-mgr-btn');
+
+      if (mode === 'ceo') {
+        ceoView.classList.remove('hidden');
+        mgrView.classList.add('hidden');
+        ceoBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30 transition-all flex items-center gap-1.5";
+        mgrBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5";
+      } else {
+        mgrView.classList.remove('hidden');
+        ceoView.classList.add('hidden');
+        mgrBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold bg-blue-500/20 text-blue-300 border border-blue-500/30 transition-all flex items-center gap-1.5";
+        ceoBtn.className = "px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-400 hover:text-slate-200 transition-all flex items-center gap-1.5";
+      }
+    }
+
+    function scanStock(amount) {
+      stock -= amount;
+      if (stock < 0) stock = 0;
+      document.getElementById('stock-val').textContent = `${stock} 개`;
+
+      addLog(`🟢 [부장/재고] 스마트폰 스캔: 재고 ${amount}개 차감 (잔여: ${stock}개)`);
+
+      if (stock <= 50) {
+        addLog(`🚨 [Slack 자동알림] ⚠️ 경고: 안전재고(50개) 미달! 잔여수량: ${stock}개 → 발주 요망`);
+        alert(`🚨 [Slack 알림 전송]\n안전재고(50개) 미달 감지!\nSlack #재고-알림 채널에 자동 발주 알림이 전송되었습니다.`);
+      }
+    }
+
+    function approveDesign(btn) {
+      btn.innerText = "✓ 승인 완료됨";
+      btn.disabled = true;
+      btn.className = "w-full py-2 bg-emerald-800 text-emerald-200 rounded-lg text-xs font-bold cursor-not-allowed";
+      document.getElementById('feedback-val').textContent = "0 건";
+      addLog(`🟢 [대표/피드백] Canva 상세페이지 v2.3 시안 최종 승인 완료`);
+      alert("Canva 시안이 최종 승인되었습니다. 부장님 워크스페이스 노션 보드로 자동 업데이트됩니다.");
+    }
+
+    function rejectDesign() {
+      const comment = prompt("부장님께 전달할 피드백 댓글을 입력하세요:", "헤드라인 카피 폰트 크기를 키워주세요.");
+      if (comment) {
+        addLog(`💬 [대표/피드백] 시안 댓글 남김: "${comment}"`);
+        alert("피드백이 노션 및 슬랙으로 부장님께 즉시 전달되었습니다.");
+      }
+    }
+
+    function addB2BDeal() {
+      const name = prompt("거래처명을 입력하세요:", "(주)신선식품 무역");
+      if (name) {
+        const list = document.getElementById('b2b-list');
+        const item = document.createElement('div');
+        item.className = "bg-slate-950 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between";
+        item.innerHTML = `
+          <div>
+            <div class="text-xs font-bold text-white">${name}</div>
+            <div class="text-[11px] text-slate-400">미팅록: 신규 B2B 상담 접수건</div>
+          </div>
+          <span class="px-2 py-1 bg-blue-500/20 text-blue-300 text-[10px] font-bold rounded">상담진행</span>
+        `;
+        list.prepend(item);
+        addLog(`🟢 [대표/B2B] 신규 거래처 [${name}] 등록 완료`);
+      }
+    }
+
+    function copyFaq(text) {
+      navigator.clipboard.writeText(text);
+      alert(`[답변 복사 완료]\n"${text}"`);
+    }
+
+    function addLog(msg) {
+      const log = document.getElementById('activity-log');
+      const time = new Date().toTimeString().split(' ')[0].substring(0, 5);
+      const item = document.createElement('div');
+      item.className = "p-2.5 bg-slate-950 rounded-lg border border-slate-800 flex justify-between text-slate-300";
+      item.innerHTML = `<span>${msg}</span><span class="text-[10px] text-slate-500">${time}</span>`;
+      log.prepend(item);
+    }
+  </script>
+</body>
+</html>
